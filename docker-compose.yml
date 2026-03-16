@@ -14,6 +14,18 @@ services:
       - .:/app
     restart: unless-stopped
 
+  frontend:
+    build: .
+    container_name: ia_gen_medical_frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000/api/v1
+    command: ["streamlit", "run", "front/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    restart: unless-stopped
+
   db:
     image: postgres:16
     container_name: ia_gen_medical_db
