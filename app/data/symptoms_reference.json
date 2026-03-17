@@ -1,0 +1,262 @@
+[
+  {
+    "canonical_name": "chest pain",
+    "synonyms": ["chest pressure", "thoracic pain", "pain in chest"],
+    "category": "cardiovascular",
+    "severity_hint": "high",
+    "body_zone": "chest",
+    "specialties": ["Cardiology", "Pulmonology"],
+    "is_red_flag": true,
+    "red_flag_message": "Chest pain may require urgent medical attention."
+  },
+  {
+    "canonical_name": "shortness of breath",
+    "synonyms": ["difficulty breathing", "breathlessness", "dyspnea"],
+    "category": "respiratory",
+    "severity_hint": "high",
+    "body_zone": "chest",
+    "specialties": ["Pulmonology", "Cardiology"],
+    "is_red_flag": true,
+    "red_flag_message": "Difficulty breathing may require urgent medical attention."
+  },
+  {
+    "canonical_name": "palpitations",
+    "synonyms": ["irregular heartbeat", "racing heart", "heart pounding"],
+    "category": "cardiovascular",
+    "severity_hint": "medium",
+    "body_zone": "chest",
+    "specialties": ["Cardiology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "fainting",
+    "synonyms": ["syncope", "passed out", "loss of consciousness"],
+    "category": "neurological_cardiovascular",
+    "severity_hint": "high",
+    "body_zone": "general",
+    "specialties": ["Cardiology", "Neurology"],
+    "is_red_flag": true,
+    "red_flag_message": "Fainting may indicate a serious condition and should be evaluated promptly."
+  },
+  {
+    "canonical_name": "seizure",
+    "synonyms": ["convulsion", "fit", "seizure episode"],
+    "category": "neurological",
+    "severity_hint": "high",
+    "body_zone": "head",
+    "specialties": ["Neurology"],
+    "is_red_flag": true,
+    "red_flag_message": "Seizure-like symptoms require urgent medical evaluation."
+  },
+  {
+    "canonical_name": "sudden paralysis",
+    "synonyms": ["can't move suddenly", "sudden weakness on one side", "paralyzed suddenly"],
+    "category": "neurological",
+    "severity_hint": "high",
+    "body_zone": "face arm leg",
+    "specialties": ["Neurology"],
+    "is_red_flag": true,
+    "red_flag_message": "Sudden paralysis is a neurological red flag and may require emergency care."
+  },
+  {
+    "canonical_name": "headache",
+    "synonyms": ["head pain", "migraine", "severe headache"],
+    "category": "neurological",
+    "severity_hint": "medium",
+    "body_zone": "head",
+    "specialties": ["Neurology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "dizziness",
+    "synonyms": ["vertigo", "lightheadedness", "feeling dizzy"],
+    "category": "neurological",
+    "severity_hint": "medium",
+    "body_zone": "head",
+    "specialties": ["Neurology", "Otorhinolaryngology (ENT)", "Cardiology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "numbness",
+    "synonyms": ["tingling", "pins and needles", "loss of sensation"],
+    "category": "neurological",
+    "severity_hint": "medium",
+    "body_zone": "arm leg face hand",
+    "specialties": ["Neurology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "abdominal pain",
+    "synonyms": ["stomach pain", "belly pain", "pain in abdomen"],
+    "category": "digestive",
+    "severity_hint": "medium",
+    "body_zone": "abdomen",
+    "specialties": ["Gastroenterology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "blood in stool",
+    "synonyms": ["bloody stool", "rectal bleeding", "black stools"],
+    "category": "digestive",
+    "severity_hint": "high",
+    "body_zone": "abdomen",
+    "specialties": ["Gastroenterology"],
+    "is_red_flag": true,
+    "red_flag_message": "Blood in stool should be medically evaluated."
+  },
+  {
+    "canonical_name": "vomiting blood",
+    "synonyms": ["hematemesis", "blood when vomiting"],
+    "category": "digestive",
+    "severity_hint": "high",
+    "body_zone": "abdomen",
+    "specialties": ["Gastroenterology"],
+    "is_red_flag": true,
+    "red_flag_message": "Vomiting blood is a red flag and requires urgent medical attention."
+  },
+  {
+    "canonical_name": "rash",
+    "synonyms": ["skin eruption", "red spots", "skin rash"],
+    "category": "dermatological",
+    "severity_hint": "low",
+    "body_zone": "skin",
+    "specialties": ["Dermatology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "itching",
+    "synonyms": ["pruritus", "itchy skin", "itchiness"],
+    "category": "dermatological",
+    "severity_hint": "low",
+    "body_zone": "skin",
+    "specialties": ["Dermatology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "blurred vision",
+    "synonyms": ["blurry vision", "vision blur", "cannot see clearly"],
+    "category": "ophthalmological",
+    "severity_hint": "medium",
+    "body_zone": "eye",
+    "specialties": ["Ophthalmology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "sudden vision loss",
+    "synonyms": ["sudden blindness", "lost vision suddenly", "cannot see suddenly"],
+    "category": "ophthalmological",
+    "severity_hint": "high",
+    "body_zone": "eye",
+    "specialties": ["Ophthalmology", "Neurology"],
+    "is_red_flag": true,
+    "red_flag_message": "Sudden vision loss requires urgent evaluation."
+  },
+  {
+    "canonical_name": "joint pain",
+    "synonyms": ["pain in joints", "arthralgia", "painful joints"],
+    "category": "rheumatological",
+    "severity_hint": "medium",
+    "body_zone": "joint",
+    "specialties": ["Rheumatology", "Orthopedics"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "joint swelling",
+    "synonyms": ["swollen joint", "joint inflammation", "puffy joint"],
+    "category": "rheumatological",
+    "severity_hint": "medium",
+    "body_zone": "joint",
+    "specialties": ["Rheumatology", "Orthopedics"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "frequent urination",
+    "synonyms": ["urinating often", "peeing frequently", "urinary frequency"],
+    "category": "urological_endocrine",
+    "severity_hint": "medium",
+    "body_zone": "pelvis",
+    "specialties": ["Urology", "Endocrinology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "blood in urine",
+    "synonyms": ["bloody urine", "hematuria", "red urine"],
+    "category": "urological",
+    "severity_hint": "high",
+    "body_zone": "pelvis",
+    "specialties": ["Urology", "Nephrology"],
+    "is_red_flag": true,
+    "red_flag_message": "Blood in urine should be medically evaluated."
+  },
+  {
+    "canonical_name": "unable to urinate",
+    "synonyms": ["cannot urinate", "urinary retention", "can't pee"],
+    "category": "urological",
+    "severity_hint": "high",
+    "body_zone": "pelvis",
+    "specialties": ["Urology"],
+    "is_red_flag": true,
+    "red_flag_message": "Inability to urinate may require urgent medical evaluation."
+  },
+  {
+    "canonical_name": "pelvic pain",
+    "synonyms": ["pain in pelvis", "lower pelvic pain", "pelvis discomfort"],
+    "category": "gynecological_urological",
+    "severity_hint": "medium",
+    "body_zone": "pelvis",
+    "specialties": ["Gynecology", "Urology"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "heavy vaginal bleeding",
+    "synonyms": ["very heavy periods", "heavy bleeding", "abnormal vaginal bleeding"],
+    "category": "gynecological",
+    "severity_hint": "high",
+    "body_zone": "pelvis",
+    "specialties": ["Gynecology"],
+    "is_red_flag": true,
+    "red_flag_message": "Heavy vaginal bleeding may require urgent medical evaluation."
+  },
+  {
+    "canonical_name": "fever",
+    "synonyms": ["high temperature", "pyrexia", "feverish"],
+    "category": "infectious",
+    "severity_hint": "medium",
+    "body_zone": "general",
+    "specialties": ["Infectious Diseases"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "persistent sadness",
+    "synonyms": ["constant sadness", "feeling depressed", "low mood"],
+    "category": "psychiatric",
+    "severity_hint": "medium",
+    "body_zone": "general",
+    "specialties": ["Psychiatry"],
+    "is_red_flag": false,
+    "red_flag_message": null
+  },
+  {
+    "canonical_name": "suicidal thoughts",
+    "synonyms": ["want to die", "kill myself", "wanna suicide"],
+    "category": "psychiatric",
+    "severity_hint": "critical",
+    "body_zone": "general",
+    "specialties": ["Psychiatry"],
+    "is_red_flag": true,
+    "red_flag_message": "Suicidal thoughts require immediate professional help."
+  }
+]
