@@ -11,7 +11,7 @@ def normalize_text(text: str | None) -> str:
     text = unicodedata.normalize("NFKD", text)
     text = "".join(ch for ch in text if not unicodedata.combining(ch))
     text = text.lower()
-    text = re.sub(r"[^a-z0-9\s\-\/]", " ", text)
+    text = re.sub(r"[^a-z0-9àâçéèêëîïôûùüÿñæœ\s\-\/]", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
     return text
 

@@ -1,3 +1,4 @@
+# similarity_service.py
 from sklearn.metrics.pairwise import cosine_similarity
 
 

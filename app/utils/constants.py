@@ -1,167 +1,216 @@
 RED_FLAG_KEYWORDS = {
-    "severe chest pain": {
+    "douleur thoracique intense": {
         "severity": "high",
-        "message": "Severe chest pain may require urgent medical attention."
+        "message": "Une douleur thoracique intense peut nécessiter une prise en charge urgente."
     },
     "crushing chest pain": {
         "severity": "high",
-        "message": "Crushing chest pain may require urgent medical attention."
+        "message": "Une douleur thoracique écrasante peut nécessiter une prise en charge urgente."
     },
-    "chest pain with sweating": {
+    "douleur thoracique avec sueurs": {
         "severity": "high",
-        "message": "Chest pain associated with autonomic symptoms may require urgent evaluation."
+        "message": "Une douleur thoracique avec sueurs est un signal d'alarme cardiovasculaire."
     },
-    "chest pain with nausea": {
+    "douleur thoracique avec nausées": {
         "severity": "high",
-        "message": "Chest pain associated with nausea may require urgent evaluation."
+        "message": "Une douleur thoracique avec nausées doit être évaluée rapidement."
     },
-    "fainting": {
+    "douleur thoracique avec essoufflement": {
         "severity": "high",
-        "message": "Fainting may indicate a serious condition and should be evaluated promptly."
+        "message": "Douleur thoracique et essoufflement associés peuvent relever d'une urgence."
     },
-    "syncope": {
+    "essoufflement au repos": {
         "severity": "high",
-        "message": "Syncope may require urgent medical attention."
+        "message": "Un essoufflement au repos peut être une urgence médicale."
     },
-    "seizure": {
+    "difficulté respiratoire": {
         "severity": "high",
-        "message": "Seizure-like symptoms require urgent medical evaluation."
-    },
-    "convulsion": {
-        "severity": "high",
-        "message": "Convulsion-like symptoms require urgent medical evaluation."
-    },
-    "sudden paralysis": {
-        "severity": "high",
-        "message": "Sudden paralysis is a neurological red flag and may require emergency care."
-    },
-    "sudden weakness": {
-        "severity": "high",
-        "message": "Sudden weakness may indicate an urgent neurological issue."
-    },
-    "speech difficulty": {
-        "severity": "high",
-        "message": "Sudden speech difficulty may require urgent neurological assessment."
-    },
-    "facial droop": {
-        "severity": "high",
-        "message": "Facial droop may require urgent neurological assessment."
+        "message": "Une difficulté respiratoire peut nécessiter une prise en charge urgente."
     },
     "difficulty breathing": {
         "severity": "high",
-        "message": "Difficulty breathing may require urgent medical attention."
+        "message": "Une difficulté respiratoire peut nécessiter une prise en charge urgente."
     },
-    "shortness of breath at rest": {
+    "lèvres bleues": {
         "severity": "high",
-        "message": "Breathing difficulty at rest may require urgent medical attention."
+        "message": "Des lèvres bleues peuvent traduire un manque d'oxygène."
     },
-    "bluish lips": {
+    "crachats de sang": {
         "severity": "high",
-        "message": "Bluish lips may indicate low oxygen and urgent evaluation is recommended."
+        "message": "Cracher du sang nécessite une évaluation urgente."
     },
     "coughing blood": {
         "severity": "high",
-        "message": "Coughing blood is a red flag and should be evaluated urgently."
+        "message": "Cracher du sang nécessite une évaluation urgente."
+    },
+    "vomissements de sang": {
+        "severity": "high",
+        "message": "Des vomissements de sang nécessitent une prise en charge urgente."
     },
     "vomiting blood": {
         "severity": "high",
-        "message": "Vomiting blood is a red flag and requires urgent medical attention."
+        "message": "Des vomissements de sang nécessitent une prise en charge urgente."
+    },
+    "sang dans les selles": {
+        "severity": "high",
+        "message": "Du sang dans les selles doit être évalué médicalement rapidement."
     },
     "blood in stool": {
         "severity": "high",
-        "message": "Blood in stool should be medically evaluated."
+        "message": "Du sang dans les selles doit être évalué médicalement rapidement."
     },
-    "black stools": {
+    "selles noires": {
         "severity": "high",
-        "message": "Black stools may indicate gastrointestinal bleeding."
+        "message": "Des selles noires peuvent évoquer un saignement digestif."
     },
-    "blood in urine": {
-        "severity": "medium",
-        "message": "Blood in urine should be medically evaluated."
-    },
-    "sudden vision loss": {
+    "malaise avec perte de connaissance": {
         "severity": "high",
-        "message": "Sudden vision loss requires urgent ophthalmologic or emergency evaluation."
+        "message": "Un malaise avec perte de connaissance nécessite une évaluation urgente."
+    },
+    "syncope": {
+        "severity": "high",
+        "message": "Une syncope nécessite une évaluation urgente."
+    },
+    "convulsions": {
+        "severity": "high",
+        "message": "Une crise convulsive nécessite une évaluation urgente."
+    },
+    "seizure": {
+        "severity": "high",
+        "message": "Une crise convulsive nécessite une évaluation urgente."
+    },
+    "paralysie brutale": {
+        "severity": "high",
+        "message": "Une paralysie brutale est un signal d'alarme neurologique."
+    },
+    "faiblesse brutale": {
+        "severity": "high",
+        "message": "Une faiblesse brutale peut correspondre à une urgence neurologique."
+    },
+    "trouble brutal de la parole": {
+        "severity": "high",
+        "message": "Un trouble brutal de la parole nécessite une évaluation urgente."
+    },
+    "speech difficulty": {
+        "severity": "high",
+        "message": "Un trouble brutal de la parole nécessite une évaluation urgente."
+    },
+    "perte brutale de la vision": {
+        "severity": "high",
+        "message": "Une perte brutale de la vision nécessite une évaluation urgente."
     },
     "confusion": {
         "severity": "high",
-        "message": "Acute confusion may require urgent medical evaluation."
+        "message": "Une confusion aiguë nécessite une évaluation urgente."
     },
-    "stiff neck": {
+    "raideur de nuque": {
         "severity": "high",
-        "message": "A stiff neck with systemic symptoms may require urgent evaluation."
+        "message": "Une raideur de nuque associée à un syndrome infectieux est un signal d'alerte."
     },
-    "suicidal thoughts": {
-        "severity": "critical",
-        "message": "Suicidal thoughts require immediate support and urgent professional help."
+    "sang dans les urines": {
+        "severity": "medium",
+        "message": "Du sang dans les urines doit être évalué médicalement."
     },
-    "self-harm thoughts": {
-        "severity": "critical",
-        "message": "Self-harm thoughts require immediate support and urgent professional help."
+    "blood in urine": {
+        "severity": "medium",
+        "message": "Du sang dans les urines doit être évalué médicalement."
     },
-    "want to die": {
-        "severity": "critical",
-        "message": "Suicidal intent requires immediate support and urgent professional help."
+    "impossibilité d uriner": {
+        "severity": "high",
+        "message": "L'impossibilité d'uriner est une urgence médicale."
     },
-    "wanna suicide": {
-        "severity": "critical",
-        "message": "Suicidal intent requires immediate support and urgent professional help."
+    "impossibilité d'uriner": {
+        "severity": "high",
+        "message": "L'impossibilité d'uriner est une urgence médicale."
     },
-    "kill myself": {
-        "severity": "critical",
-        "message": "Suicidal intent requires immediate support and urgent professional help."
+    "saignement vaginal abondant": {
+        "severity": "high",
+        "message": "Un saignement vaginal abondant peut nécessiter une prise en charge urgente."
     },
     "heavy vaginal bleeding": {
         "severity": "high",
-        "message": "Heavy vaginal bleeding may require urgent medical evaluation."
+        "message": "Un saignement vaginal abondant peut nécessiter une prise en charge urgente."
     },
-    "unable to urinate": {
-        "severity": "high",
-        "message": "Inability to urinate may require urgent medical evaluation."
+    "idées suicidaires": {
+        "severity": "critical",
+        "message": "Urgence détectée : contactez immédiatement le SAMU (15)."
     },
+    "envie de mourir": {
+        "severity": "critical",
+        "message": "Urgence détectée : contactez immédiatement le SAMU (15)."
+    },
+    "penser au suicide": {
+        "severity": "critical",
+        "message": "Urgence détectée : contactez immédiatement le SAMU (15)."
+    },
+    "suicidal thoughts": {
+        "severity": "critical",
+        "message": "Urgence détectée : contactez immédiatement le SAMU (15)."
+    },
+    "kill myself": {
+        "severity": "critical",
+        "message": "Urgence détectée : contactez immédiatement le SAMU (15)."
+    }
 }
 
 SPECIALTY_ALIASES = {
-    "ENT": "Otorhinolaryngology (ENT)",
-    "Otorhinolaryngology": "Otorhinolaryngology (ENT)",
-    "Ear Nose Throat": "Otorhinolaryngology (ENT)",
-    "Ear, Nose and Throat": "Otorhinolaryngology (ENT)",
+    "Cardiology": "Cardiologie",
+    "Pulmonology": "Pneumologie",
+    "Neurology": "Neurologie",
+    "Gastroenterology": "Gastro-entérologie",
+    "Dermatology": "Dermatologie",
+    "Otorhinolaryngology (ENT)": "ORL",
+    "ENT": "ORL",
+    "Ophthalmology": "Ophtalmologie",
+    "Rheumatology": "Rhumatologie",
+    "Endocrinology": "Endocrinologie",
+    "Nephrology": "Néphrologie",
+    "Urology": "Urologie",
+    "Gynecology": "Gynécologie",
+    "Psychiatry": "Psychiatrie",
+    "Infectious Diseases": "Infectiologie",
+    "Orthopedics": "Orthopédie",
+    "O.R.L.": "ORL"
 }
 
 SPECIALTY_LOCATION_KEYWORDS = {
-    "Cardiology": ["chest", "thorax", "heart", "left chest"],
-    "Pulmonology": ["chest", "lungs", "breathing", "thorax"],
-    "Neurology": ["head", "brain", "face", "arm", "leg", "left arm", "right arm"],
-    "Gastroenterology": ["abdomen", "stomach", "belly", "digestive", "lower abdomen"],
-    "Dermatology": ["skin", "scalp", "face", "nails", "hair"],
-    "Otorhinolaryngology (ENT)": ["ear", "ears", "nose", "throat", "sinus", "neck"],
-    "Ophthalmology": ["eye", "eyes", "vision", "eyelid"],
-    "Rheumatology": ["joint", "joints", "back", "hand", "hands", "wrist", "knee", "shoulder"],
-    "Endocrinology": ["general", "whole body"],
-    "Nephrology": ["flank", "kidney", "kidneys", "back", "feet", "legs"],
-    "Urology": ["pelvis", "pelvic", "urinary", "bladder", "flank"],
-    "Gynecology": ["pelvis", "pelvic", "lower abdomen"],
-    "Psychiatry": ["general", "mental", "sleep"],
-    "Infectious Diseases": ["general", "whole body", "throat", "lungs"],
-    "Orthopedics": ["bone", "bones", "joint", "joints", "back", "knee", "shoulder", "arm", "leg"],
+    "Cardiologie": ["thorax", "poitrine", "cœur", "chest", "heart"],
+    "Pneumologie": ["thorax", "poitrine", "poumons", "respiration", "lungs", "breathing", "chest"],
+    "Neurologie": ["tête", "cerveau", "visage", "bras", "jambe", "head", "brain", "face", "arm", "leg"],
+    "Gastro-entérologie": ["abdomen", "ventre", "estomac", "digestif", "abdomen", "stomach", "belly"],
+    "Dermatologie": ["peau", "cuir chevelu", "visage", "ongles", "skin", "scalp", "nails"],
+    "ORL": ["oreille", "oreilles", "nez", "gorge", "sinus", "cou", "ear", "ears", "nose", "throat"],
+    "Ophtalmologie": ["œil", "yeux", "vision", "paupière", "eye", "eyes", "vision"],
+    "Rhumatologie": ["articulation", "dos", "main", "poignet", "genou", "épaule", "joint", "back", "knee", "shoulder"],
+    "Endocrinologie": ["général", "general", "whole body"],
+    "Néphrologie": ["flanc", "rein", "reins", "lombes", "flank", "kidney", "back"],
+    "Urologie": ["bassin", "pelvis", "pelvien", "urinaire", "vessie", "bladder", "flanc"],
+    "Gynécologie": ["bassin", "pelvis", "pelvien", "bas ventre", "lower abdomen"],
+    "Psychiatrie": ["général", "sommeil", "mental", "general", "sleep", "mood"],
+    "Infectiologie": ["général", "whole body", "gorge", "poumons", "throat", "lungs"],
+    "Orthopédie": ["os", "articulation", "dos", "genou", "épaule", "bras", "jambe", "bone", "joint", "arm", "leg"]
 }
 
 INTENSITY_BONUS_SPECIALTIES = {
     "high": {
-        "Cardiology",
-        "Pulmonology",
-        "Neurology",
-        "Infectious Diseases",
-        "Orthopedics",
-        "Gynecology",
+        "Cardiologie",
+        "Pneumologie",
+        "Neurologie",
+        "Infectiologie",
+        "Orthopédie",
+        "Gynécologie"
     },
     "medium": {
-        "Gastroenterology",
-        "Urology",
-        "Rheumatology",
-        "Dermatology",
-        "Endocrinology",
-        "Nephrology",
+        "Gastro-entérologie",
+        "Urologie",
+        "Rhumatologie",
+        "Dermatologie",
+        "Endocrinologie",
+        "Néphrologie",
+        "Psychiatrie"
     },
-    "low": set(),
+    "low": set()
 }
+
+SAMU_TRIGGER_SEVERITIES = {"high", "critical"}
+SAMU_ALERT_MESSAGE = "Urgence détectée : Contactez immédiatement le SAMU (15)"

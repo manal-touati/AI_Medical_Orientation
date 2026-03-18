@@ -1,107 +1,107 @@
 [
   {
-    "name": "Cardiology",
-    "description": "Specialty focused on the heart and cardiovascular system, including chest pain, palpitations, exertional symptoms, blood pressure issues and possible circulation-related problems.",
-    "symptoms_associated": "chest pain, chest pressure, palpitations, shortness of breath, dizziness, fainting, ankle swelling, fatigue on exertion, irregular heartbeat, high blood pressure",
-    "indications": "persistent chest discomfort, effort-related shortness of breath, recurrent palpitations, syncope, suspected cardiovascular symptoms",
-    "red_flags": "severe or crushing chest pain, chest pain with shortness of breath, fainting, sudden collapse, chest pain with sweating or nausea"
+    "name": "Cardiologie",
+    "description": "Spécialité centrée sur le cœur et le système cardiovasculaire. Elle prend en charge les douleurs thoraciques, les palpitations, les malaises, l'essoufflement d'effort, l'hypertension et les troubles du rythme.",
+    "symptoms_associated": "douleur thoracique, oppression thoracique, palpitations, essoufflement, malaise, syncope, œdèmes des jambes, fatigue à l'effort, rythme cardiaque irrégulier, hypertension",
+    "indications": "douleur thoracique persistante, essoufflement à l'effort, palpitations récurrentes, malaise, suspicion de problème cardiaque",
+    "red_flags": "douleur thoracique intense, douleur thoracique avec essoufflement, malaise, syncope, douleur thoracique avec sueurs, douleur thoracique avec nausées"
   },
   {
-    "name": "Pulmonology",
-    "description": "Specialty focused on lung and respiratory disorders involving breathing difficulty, chronic cough, wheezing or chest tightness.",
-    "symptoms_associated": "shortness of breath, chronic cough, wheezing, chest tightness, noisy breathing, cough with mucus, reduced exercise tolerance, pain when breathing",
-    "indications": "persistent cough, breathing discomfort, asthma-like symptoms, recurrent wheezing, chronic respiratory complaints",
-    "red_flags": "severe breathing difficulty, bluish lips, coughing blood, chest pain with severe breathlessness, confusion with low oxygen symptoms"
+    "name": "Pneumologie",
+    "description": "Spécialité des poumons et des voies respiratoires. Elle est concernée par les difficultés respiratoires, la toux chronique, les sifflements, l'oppression thoracique et les douleurs respiratoires.",
+    "symptoms_associated": "essoufflement, toux persistante, respiration sifflante, oppression thoracique, douleur en respirant, toux avec glaires, intolérance à l'effort, gêne respiratoire",
+    "indications": "toux persistante, gêne respiratoire, asthme suspecté, sifflements répétés, plainte respiratoire chronique",
+    "red_flags": "difficulté respiratoire sévère, lèvres bleues, crachats de sang, douleur thoracique avec grande gêne respiratoire, confusion avec manque d'oxygène"
   },
   {
-    "name": "Neurology",
-    "description": "Specialty focused on disorders of the brain, spinal cord and nerves, including headaches, weakness, numbness, seizures and cognitive or coordination issues.",
-    "symptoms_associated": "headache, migraine, numbness, tingling, weakness, tremor, seizures, memory problems, balance problems, speech difficulty, coordination issues",
-    "indications": "persistent neurological symptoms, recurrent migraine, sensory loss, nerve pain, unexplained weakness, seizure-like episodes",
-    "red_flags": "sudden paralysis, sudden speech difficulty, sudden facial droop, acute confusion, seizure, sudden severe headache, sudden loss of coordination"
+    "name": "Neurologie",
+    "description": "Spécialité du cerveau, de la moelle épinière et des nerfs. Elle concerne les céphalées, les troubles moteurs, sensitifs, de la parole, de l'équilibre et les convulsions.",
+    "symptoms_associated": "maux de tête, migraine, vertiges, engourdissement, faiblesse, tremblements, convulsions, troubles de mémoire, troubles de l'équilibre, troubles de la parole, perte de coordination",
+    "indications": "symptômes neurologiques persistants, migraines répétées, perte de sensibilité, faiblesse inexpliquée, crise convulsive, vertiges inexpliqués",
+    "red_flags": "paralysie brutale, faiblesse brutale d'un côté, trouble brutal de la parole, chute du visage, confusion aiguë, convulsion, céphalée brutale intense"
   },
   {
-    "name": "Gastroenterology",
-    "description": "Specialty focused on digestive system disorders affecting the esophagus, stomach, intestines, liver and related organs.",
-    "symptoms_associated": "abdominal pain, bloating, nausea, vomiting, reflux, heartburn, diarrhea, constipation, swallowing difficulty, blood in stool, digestive discomfort",
-    "indications": "chronic abdominal symptoms, persistent reflux, altered bowel habits, recurrent nausea, suspected digestive tract disorder",
-    "red_flags": "blood in stool, black stools, severe abdominal pain, persistent vomiting, vomiting blood, dehydration signs"
+    "name": "Gastro-entérologie",
+    "description": "Spécialité du tube digestif et des organes associés. Elle prend en charge les douleurs abdominales, les troubles du transit, le reflux, les nausées, les vomissements et les saignements digestifs.",
+    "symptoms_associated": "douleur abdominale, ballonnements, constipation, diarrhée, nausées, vomissements, reflux, brûlures d'estomac, difficulté à avaler, sang dans les selles, inconfort digestif",
+    "indications": "douleur abdominale chronique, reflux persistant, troubles du transit, constipation prolongée, diarrhée répétée, saignement digestif",
+    "red_flags": "sang dans les selles, selles noires, douleur abdominale intense, vomissements persistants, vomissements de sang, déshydratation"
   },
   {
-    "name": "Dermatology",
-    "description": "Specialty focused on skin, hair and nail disorders, including inflammatory rashes, lesions, itching and chronic skin changes.",
-    "symptoms_associated": "rash, itching, redness, skin lesions, acne, eczema, scaling, dry skin, suspicious mole, nail changes, hives, skin discoloration",
-    "indications": "persistent rash, chronic itching, suspicious skin lesion, inflammatory skin disease, recurrent flare-ups",
-    "red_flags": "rapidly spreading rash, skin swelling with breathing symptoms, infected skin lesion with fever, painful blistering rash, rapidly changing mole"
+    "name": "Dermatologie",
+    "description": "Spécialité de la peau, des ongles et des phanères. Elle est sollicitée pour les éruptions cutanées, le prurit, les lésions, l'acné, l'eczéma et les anomalies de grains de beauté.",
+    "symptoms_associated": "éruption cutanée, démangeaisons, rougeur, plaques, lésion de peau, acné, eczéma, peau sèche, grain de beauté suspect, modification des ongles, urticaire",
+    "indications": "éruption persistante, démangeaisons chroniques, lésion suspecte, poussées inflammatoires de la peau, lésion qui change d'aspect",
+    "red_flags": "éruption qui s'étend rapidement, gonflement cutané avec gêne respiratoire, lésion infectée avec fièvre, décollement cutané douloureux, grain de beauté qui change rapidement"
   },
   {
-    "name": "Otorhinolaryngology (ENT)",
-    "description": "Specialty focused on ear, nose and throat disorders, including hearing issues, sinus problems, throat symptoms and balance-related complaints.",
-    "symptoms_associated": "ear pain, hearing loss, tinnitus, sore throat, hoarseness, nasal congestion, sinus pain, nosebleeds, dizziness, swallowing discomfort, ear discharge",
-    "indications": "persistent ear symptoms, chronic sinus complaints, recurrent sore throat, hearing issues, chronic nasal or throat problems",
-    "red_flags": "sudden hearing loss, difficulty breathing with throat swelling, severe nosebleed, persistent hoarseness, severe swallowing difficulty"
+    "name": "ORL",
+    "description": "Spécialité des oreilles, du nez et de la gorge. Elle traite les troubles auditifs, les douleurs d'oreille, les sinusites, les maux de gorge, l'enrouement et certains vertiges.",
+    "symptoms_associated": "douleur d'oreille, baisse d'audition, acouphènes, mal de gorge, enrouement, nez bouché, douleur des sinus, saignement de nez, vertiges, gêne en avalant, écoulement de l'oreille",
+    "indications": "symptômes ORL persistants, sinusite chronique, mal de gorge répété, trouble auditif, gêne nasale ou pharyngée persistante",
+    "red_flags": "perte auditive brutale, difficulté à respirer avec gorge gonflée, saignement de nez important, enrouement prolongé, difficulté sévère à avaler"
   },
   {
-    "name": "Ophthalmology",
-    "description": "Specialty focused on eye and vision disorders including red eye, visual changes, pain, irritation and sudden loss of sight.",
-    "symptoms_associated": "red eye, eye pain, blurred vision, vision loss, double vision, photophobia, tearing, foreign body sensation, flashes, floaters, swollen eyelid",
-    "indications": "persistent eye symptoms, unexplained visual disturbance, recurrent painful red eye, progressive blurred vision",
-    "red_flags": "sudden loss of vision, severe eye pain, chemical eye injury, red eye with photophobia, eye trauma, flashes with sudden visual change"
+    "name": "Ophtalmologie",
+    "description": "Spécialité de l'œil et de la vision. Elle prend en charge les yeux rouges, les douleurs oculaires, les troubles visuels, la photophobie et les pertes de vision.",
+    "symptoms_associated": "œil rouge, douleur oculaire, vision floue, perte de vision, vision double, photophobie, larmoiement, sensation de corps étranger, éclairs lumineux, corps flottants, paupière gonflée",
+    "indications": "trouble visuel persistant, douleur oculaire, rougeur douloureuse, baisse progressive de vision, symptôme oculaire inexpliqué",
+    "red_flags": "perte brutale de la vision, douleur oculaire intense, traumatisme oculaire, œil rouge avec photophobie, changement visuel brutal"
   },
   {
-    "name": "Rheumatology",
-    "description": "Specialty focused on inflammatory and autoimmune conditions affecting joints, connective tissue and sometimes muscles.",
-    "symptoms_associated": "joint pain, joint swelling, morning stiffness, joint warmth, back pain, muscle pain, fatigue, reduced mobility, hand pain, wrist pain, swollen fingers",
-    "indications": "chronic joint pain, inflammatory joint symptoms, stiffness worse in the morning, suspected autoimmune musculoskeletal disease",
-    "red_flags": "rapid joint swelling with fever, severe functional limitation, hot swollen joint, unexplained systemic inflammation symptoms"
+    "name": "Rhumatologie",
+    "description": "Spécialité des maladies inflammatoires et auto-immunes touchant les articulations, les tissus conjonctifs et parfois les muscles.",
+    "symptoms_associated": "douleur articulaire, gonflement articulaire, raideur matinale, articulation chaude, douleur du dos, douleur musculaire, fatigue, mobilité réduite, douleurs des mains, poignets douloureux",
+    "indications": "douleurs articulaires chroniques, raideur matinale, suspicion de maladie inflammatoire, gonflement articulaire répété, douleur musculo-articulaire inexpliquée",
+    "red_flags": "grosse articulation chaude avec fièvre, gonflement rapide, limitation fonctionnelle sévère, inflammation systémique inexpliquée"
   },
   {
-    "name": "Endocrinology",
-    "description": "Specialty focused on hormone-related disorders such as thyroid disease, diabetes and metabolic regulation problems.",
-    "symptoms_associated": "fatigue, persistent thirst, frequent urination, weight gain, weight loss, heat intolerance, cold intolerance, mood changes, tremor, dry skin, hair loss",
-    "indications": "suspected hormonal disorder, thyroid-related symptoms, unexplained metabolic symptoms, persistent thirst or urination, endocrine imbalance suspicion",
-    "red_flags": "confusion with severe dehydration, excessive thirst with significant weakness, unexplained rapid weight loss, severe endocrine instability symptoms"
+    "name": "Endocrinologie",
+    "description": "Spécialité des hormones, du métabolisme, du diabète et de la thyroïde. Elle concerne la fatigue inexpliquée, la soif importante, les urines fréquentes, les variations de poids et l'intolérance au chaud ou au froid.",
+    "symptoms_associated": "fatigue importante, soif excessive, urines fréquentes, prise de poids, perte de poids, intolérance à la chaleur, intolérance au froid, tremblements, peau sèche, chute de cheveux, troubles de l'humeur",
+    "indications": "déséquilibre hormonal suspecté, symptôme thyroïdien, diabète suspecté, soif et urines fréquentes, variation de poids inexpliquée",
+    "red_flags": "confusion avec déshydratation, soif extrême avec faiblesse, perte de poids rapide inexpliquée, grande instabilité hormonale"
   },
   {
-    "name": "Nephrology",
-    "description": "Specialty focused on kidney disorders, fluid balance, electrolyte issues and chronic kidney-related symptoms.",
-    "symptoms_associated": "swollen ankles, swollen feet, swollen hands, blood in urine, fatigue, nausea, reduced urine output, high blood pressure, shortness of breath, flank discomfort",
-    "indications": "suspected kidney disease, persistent edema, recurrent abnormal urine symptoms, chronic kidney-related complaints",
-    "red_flags": "blood in urine, very reduced urine output, severe swelling, shortness of breath with fluid retention, severe kidney-related deterioration"
+    "name": "Néphrologie",
+    "description": "Spécialité du rein, des troubles hydro-électrolytiques et de la rétention d'eau. Elle est sollicitée en cas d'œdèmes, d'urines anormales, d'hypertension et de baisse du volume urinaire.",
+    "symptoms_associated": "gonflement des jambes, œdèmes, sang dans les urines, fatigue, nausées, diminution des urines, hypertension, essoufflement avec rétention d'eau, douleur lombaire",
+    "indications": "maladie rénale suspectée, œdèmes persistants, anomalies urinaires répétées, insuffisance rénale suspectée",
+    "red_flags": "sang dans les urines, baisse importante des urines, œdèmes sévères, essoufflement avec surcharge hydrique"
   },
   {
-    "name": "Urology",
-    "description": "Specialty focused on urinary tract and male genitourinary disorders, including urination problems, bladder symptoms and blood in urine.",
-    "symptoms_associated": "pain when urinating, blood in urine, urinary urgency, urinary frequency, pelvic discomfort, flank pain, urinary retention, weak urine stream, recurrent urinary infections",
-    "indications": "persistent urinary symptoms, lower urinary tract symptoms, recurrent hematuria, suspected bladder or prostate-related issues",
-    "red_flags": "visible blood in urine, inability to urinate, severe flank pain, fever with urinary symptoms, clots in urine"
+    "name": "Urologie",
+    "description": "Spécialité de l'appareil urinaire et de certains troubles génito-urinaires. Elle prend en charge les brûlures urinaires, le sang dans les urines, les difficultés à uriner et les coliques urinaires.",
+    "symptoms_associated": "brûlures urinaires, sang dans les urines, envies fréquentes d'uriner, besoin urgent d'uriner, douleur pelvienne, douleur du flanc, rétention urinaire, jet faible, infections urinaires répétées",
+    "indications": "symptômes urinaires persistants, difficulté à uriner, hématurie, suspicion de problème vésical ou prostatique",
+    "red_flags": "sang visible dans les urines, impossibilité d'uriner, douleur du flanc intense, fièvre avec symptômes urinaires"
   },
   {
-    "name": "Gynecology",
-    "description": "Specialty focused on female reproductive health, pelvic symptoms, menstrual disorders and abnormal bleeding or discharge.",
-    "symptoms_associated": "pelvic pain, lower abdominal pain, painful periods, heavy periods, irregular bleeding, bleeding after sex, unusual vaginal discharge, pain during sex, menstrual abnormalities",
-    "indications": "persistent pelvic symptoms, abnormal uterine bleeding, recurrent gynecological symptoms, chronic menstrual complaints",
-    "red_flags": "severe pelvic pain, heavy vaginal bleeding, fainting with pelvic pain, pelvic pain in pregnancy, fever with pelvic pain"
+    "name": "Gynécologie",
+    "description": "Spécialité de la santé gynécologique et reproductive. Elle concerne les douleurs pelviennes, les saignements anormaux, les troubles des règles, les pertes inhabituelles et les douleurs pendant les rapports.",
+    "symptoms_associated": "douleur pelvienne, douleur du bas ventre, règles douloureuses, règles abondantes, saignement entre les règles, saignement après rapport, pertes vaginales inhabituelles, douleur pendant les rapports, irrégularité menstruelle",
+    "indications": "douleurs pelviennes persistantes, saignements anormaux, troubles gynécologiques répétés, règles anormales, pertes vaginales inhabituelles",
+    "red_flags": "douleur pelvienne intense, saignement vaginal abondant, malaise avec douleur pelvienne, douleur pelvienne pendant grossesse, fièvre avec douleur pelvienne"
   },
   {
-    "name": "Psychiatry",
-    "description": "Specialty focused on mental health disorders affecting mood, behavior, perception and emotional regulation.",
-    "symptoms_associated": "persistent sadness, anxiety, panic attacks, hopelessness, sleep disturbance, loss of interest, irritability, poor concentration, mood instability, suicidal thoughts",
-    "indications": "persistent mood symptoms, severe anxiety, functional impairment due to mental health symptoms, recurrent psychiatric distress",
-    "red_flags": "suicidal thoughts, self-harm thoughts, psychosis, extreme agitation, severe depressive state, inability to ensure personal safety"
+    "name": "Psychiatrie",
+    "description": "Spécialité de la santé mentale, des troubles de l'humeur, de l'anxiété, du sommeil, de la pensée et du comportement.",
+    "symptoms_associated": "tristesse persistante, anxiété, attaques de panique, idées noires, insomnie, perte d'intérêt, irritabilité, difficulté de concentration, instabilité émotionnelle, idées suicidaires",
+    "indications": "symptômes anxieux persistants, dépression suspectée, trouble du sommeil lié à l'humeur, souffrance psychique importante, retentissement sur le quotidien",
+    "red_flags": "idées suicidaires, idées d'automutilation, agitation extrême, état dépressif sévère, impossibilité d'assurer sa sécurité"
   },
   {
-    "name": "Infectious Diseases",
-    "description": "Specialty focused on infections with systemic symptoms such as fever, chills, unexplained inflammation or complex recurrent infections.",
-    "symptoms_associated": "fever, chills, night sweats, fatigue, unexplained weight loss, swollen lymph nodes, persistent cough, rash with fever, recurrent infections, generalized weakness",
-    "indications": "persistent fever, recurrent or unclear infection, systemic infectious symptoms, travel-related or unusual infectious presentation",
-    "red_flags": "high fever with confusion, stiff neck, difficulty breathing with fever, rash with severe illness, signs of sepsis"
+    "name": "Infectiologie",
+    "description": "Spécialité des infections complexes, des fièvres persistantes, des infections inhabituelles et des symptômes généraux d'origine infectieuse.",
+    "symptoms_associated": "fièvre, frissons, sueurs nocturnes, fatigue, perte de poids, ganglions, toux persistante, éruption avec fièvre, infections répétées, faiblesse générale",
+    "indications": "fièvre persistante, infection à répétition, tableau infectieux inexpliqué, symptômes infectieux systémiques",
+    "red_flags": "fièvre élevée avec confusion, raideur de nuque, difficulté respiratoire avec fièvre, éruption avec altération générale, signes de sepsis"
   },
   {
-    "name": "Orthopedics",
-    "description": "Specialty focused on bones, joints, ligaments, tendons and mechanical musculoskeletal injuries or structural disorders.",
-    "symptoms_associated": "bone pain, joint pain, back pain, knee pain, shoulder pain, trauma-related pain, swelling after injury, limited movement, instability, deformity",
-    "indications": "injury-related musculoskeletal pain, persistent localized joint or bone pain, movement limitation, suspected structural orthopedic condition",
-    "red_flags": "deformity after trauma, inability to bear weight, severe limb swelling after injury, suspected fracture, sudden loss of function after trauma"
+    "name": "Orthopédie",
+    "description": "Spécialité des os, des articulations, des ligaments, des tendons et des traumatismes mécaniques.",
+    "symptoms_associated": "douleur osseuse, douleur articulaire, lombalgie, douleur du genou, douleur de l'épaule, douleur après traumatisme, gonflement après choc, limitation de mouvement, instabilité, déformation",
+    "indications": "douleur après traumatisme, limitation fonctionnelle, suspicion de fracture, douleur mécanique localisée, pathologie structurelle ostéo-articulaire",
+    "red_flags": "déformation après traumatisme, impossibilité de prendre appui, gonflement majeur après choc, fracture suspectée, perte brutale de fonction"
   }
 ]

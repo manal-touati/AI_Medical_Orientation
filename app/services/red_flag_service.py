@@ -31,7 +31,7 @@ class RedFlagService:
                     "keyword": symptom["canonical_name"],
                     "severity": severity,
                     "message": symptom.get("red_flag_message")
-                    or f"{symptom['canonical_name']} may require medical attention.",
+                    or f"{symptom['canonical_name']} peut nécessiter une évaluation médicale.",
                 })
 
         return results
@@ -43,7 +43,6 @@ class RedFlagService:
 
         for flag in keyword_flags + symptom_flags:
             key = flag["keyword"].strip().lower()
-
             if key not in merged:
                 merged[key] = flag
             else:
@@ -64,18 +63,18 @@ class RedFlagService:
     @staticmethod
     def build_warning(detected_flags: list[dict]) -> str:
         if not detected_flags:
-            return "This result is an indicative orientation only and not a medical diagnosis."
+            return "Cette orientation est purement indicative et ne remplace pas un diagnostic médical."
 
         if RedFlagService.has_critical_red_flag(detected_flags):
             return (
-                "This result is an indicative orientation only and not a medical diagnosis. "
-                "Critical warning signs were detected. Seek immediate professional or emergency help."
+                "Des signes critiques ont été détectés. "
+                "Cette orientation reste indicative et ne remplace pas une prise en charge urgente."
             )
 
         if RedFlagService.has_urgent_red_flag(detected_flags):
             return (
-                "This result is an indicative orientation only and not a medical diagnosis. "
-                "Some warning signs were detected and may require urgent medical attention."
+                "Des signaux d’alerte importants ont été détectés. "
+                "Cette orientation est indicative et une évaluation médicale rapide est recommandée."
             )
 
-        return "This result is an indicative orientation only and not a medical diagnosis."
+        return "Cette orientation est purement indicative et ne remplace pas un diagnostic médical."

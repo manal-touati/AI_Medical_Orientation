@@ -1,10 +1,12 @@
 import json
+import time
 from functools import lru_cache
 
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.repositories.recommendation_repository import RecommendationRepository
+from app.repositories.request_audit_repository import RequestAuditRepository
 from app.repositories.response_repository import ResponseRepository
 from app.services.embedding_service import EmbeddingService
 from app.services.genai_service import GenAIService
@@ -13,6 +15,7 @@ from app.services.red_flag_service import RedFlagService
 from app.services.scoring_service import ScoringService
 from app.services.similarity_service import SimilarityService
 from app.services.symptom_reference_service import SymptomReferenceService
+from app.utils.constants import SAMU_ALERT_MESSAGE, SAMU_TRIGGER_SEVERITIES
 
 
 class RecommendationService:
@@ -23,6 +26,7 @@ class RecommendationService:
         self.genai_service = GenAIService(db)
         self.response_repository = ResponseRepository(db)
         self.recommendation_repository = RecommendationRepository(db)
+        self.request_audit_repository = RequestAuditRepository(db)
         self.symptom_reference_service = SymptomReferenceService()
 
     @staticmethod
@@ -34,9 +38,9 @@ class RecommendationService:
     @staticmethod
     def build_default_explanation(specialty_name: str) -> str:
         return (
-            f"{specialty_name} may be relevant based on the semantic similarity "
-            f"and rule-based matching with the provided symptoms. "
-            f"This is not a medical diagnosis."
+            f"La spécialité « {specialty_name} » peut être pertinente au regard de la similarité sémantique "
+            f"et des règles métier appliquées aux symptômes saisis. "
+            f"Il s'agit d'une orientation indicative et non d'un diagnostic médical."
         )
 
     @staticmethod
@@ -46,7 +50,7 @@ class RecommendationService:
             return user_text
 
         canonical_part = ", ".join(canonical_symptoms)
-        return f"{user_text} Canonical symptoms detected: {canonical_part}"
+        return f"{user_text} Symptômes canoniques détectés : {canonical_part}"
 
     @staticmethod
     def build_specialty_corpus(specialties: list[dict]) -> list[str]:
@@ -54,14 +58,22 @@ class RecommendationService:
             (
                 f"{item['name']}. "
                 f"{item['description']}. "
-                f"Symptoms: {item['symptoms_associated']}. "
-                f"Indications: {item.get('indications', '')}. "
-                f"Red flags: {item.get('red_flags', '')}"
+                f"Symptômes associés : {item['symptoms_associated']}. "
+                f"Indications : {item.get('indications', '')}. "
+                f"Red flags : {item.get('red_flags', '')}"
             )
             for item in specialties
         ]
 
     def recommend(self, payload):
+        started_at = time.perf_counter()
+
+        prompt_tokens = 0
+        completion_tokens = 0
+        total_tokens = 0
+        cache_hits = 0
+        cache_misses = 0
+
         user_response = self.response_repository.create(payload)
 
         user_text = PreprocessingService.build_user_text(
@@ -74,9 +86,15 @@ class RecommendationService:
 
         enriched_text = None
         if settings.GENAI_ENABLE and len(payload.symptom_description.split()) < settings.GENAI_MIN_WORDS_THRESHOLD:
-            enriched_candidate = self.genai_service.enrich_short_input(payload.symptom_description)
-            if enriched_candidate:
-                enriched_text = enriched_candidate
+            enrich_meta = self.genai_service.enrich_short_input(payload.symptom_description)
+            prompt_tokens += enrich_meta["prompt_tokens"]
+            completion_tokens += enrich_meta["completion_tokens"]
+            total_tokens += enrich_meta["total_tokens"]
+            cache_hits += 1 if enrich_meta["cache_hit"] else 0
+            cache_misses += 0 if enrich_meta["cache_hit"] else 1
+
+            if enrich_meta["text"]:
+                enriched_text = enrich_meta["text"]
                 user_text = PreprocessingService.build_user_text(
                     symptom_description=enriched_text,
                     intensity=payload.intensity,
@@ -90,6 +108,7 @@ class RecommendationService:
         keyword_red_flags = RedFlagService.detect(user_text)
         symptom_red_flags = RedFlagService.from_detected_symptoms(detected_symptoms)
         detected_red_flags = RedFlagService.merge_red_flags(keyword_red_flags, symptom_red_flags)
+        warning = RedFlagService.build_warning(detected_red_flags)
 
         semantic_user_text = self.build_semantic_user_text(user_text, detected_symptoms)
 
@@ -105,7 +124,7 @@ class RecommendationService:
         for specialty, semantic_score in zip(specialties, similarities):
             location_bonus = ScoringService.compute_location_bonus(payload.location, specialty["name"])
             intensity_bonus = ScoringService.compute_intensity_bonus(payload.intensity, specialty["name"])
-            red_flag_detected, red_flag_bonus = ScoringService.detect_red_flags(user_text, specialty)
+            _, red_flag_bonus = ScoringService.detect_red_flags(user_text, specialty)
 
             symptom_reference_bonus = ScoringService.compute_symptom_reference_bonus(
                 detected_symptoms=detected_symptoms,
@@ -127,15 +146,10 @@ class RecommendationService:
                 "intensity_bonus": round(intensity_bonus, 4),
                 "red_flag_bonus": round(red_flag_bonus, 4),
                 "symptom_reference_bonus": round(symptom_reference_bonus, 4),
-                "red_flag_detected": red_flag_detected,
                 "final_score": final_score,
             })
 
-        sorted_all = sorted(
-            scored_results,
-            key=lambda x: x["final_score"],
-            reverse=True,
-        )
+        sorted_all = sorted(scored_results, key=lambda x: x["final_score"], reverse=True)
 
         ranked = [
             item for item in sorted_all
@@ -159,11 +173,17 @@ class RecommendationService:
 
             explanation = None
             if settings.GENAI_ENABLE:
-                explanation = self.genai_service.generate_explanation(
+                explanation_meta = self.genai_service.generate_explanation(
                     user_text=semantic_user_text,
                     specialty_name=specialty["name"],
                     specialty_description=specialty["description"],
                 )
+                prompt_tokens += explanation_meta["prompt_tokens"]
+                completion_tokens += explanation_meta["completion_tokens"]
+                total_tokens += explanation_meta["total_tokens"]
+                cache_hits += 1 if explanation_meta["cache_hit"] else 0
+                cache_misses += 0 if explanation_meta["cache_hit"] else 1
+                explanation = explanation_meta["text"]
 
             if not explanation:
                 explanation = self.build_default_explanation(specialty["name"])
@@ -176,12 +196,12 @@ class RecommendationService:
 
         if not results:
             results = [{
-                "specialty_name": "General Practice",
+                "specialty_name": "Médecine générale",
                 "similarity_score": 0.0,
                 "explanation": (
-                    "No specialty reached the minimum threshold. "
-                    "A general practitioner may be the best first point of contact. "
-                    "This is not a medical diagnosis."
+                    "Aucune spécialité n'a dépassé le seuil minimal. "
+                    "Un médecin généraliste constitue un bon premier point de contact. "
+                    "Il s'agit d'une orientation indicative et non d'un diagnostic médical."
                 ),
             }]
 
@@ -190,10 +210,39 @@ class RecommendationService:
             recommendations=results,
         )
 
+        response_time_ms = int((time.perf_counter() - started_at) * 1000)
+        top_specialty = results[0]["specialty_name"] if results else None
+        samu_advised = any(
+            flag["severity"].lower() in SAMU_TRIGGER_SEVERITIES
+            for flag in detected_red_flags
+        )
+
+        self.request_audit_repository.create(
+            symptom_description=payload.symptom_description,
+            top_specialty=top_specialty,
+            response_time_ms=response_time_ms,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            total_tokens=total_tokens,
+            cache_hits=cache_hits,
+            cache_misses=cache_misses,
+            red_flag_triggered=bool(detected_red_flags),
+            samu_advised=samu_advised,
+        )
+
         return {
             "enriched_input": enriched_text,
             "recommendations": results,
             "red_flags": detected_red_flags,
-            "warning": RedFlagService.build_warning(detected_red_flags),
+            "warning": SAMU_ALERT_MESSAGE if samu_advised else warning,
             "detected_symptoms": detected_symptoms,
+            "meta": {
+                "response_time_ms": response_time_ms,
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": total_tokens,
+                "cache_hits": cache_hits,
+                "cache_misses": cache_misses,
+                "samu_advised": samu_advised,
+            }
         }
