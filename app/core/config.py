@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     SIMILARITY_THRESHOLD: float = 0.35
 
     ADMIN_PASSWORD: str = "admin123"
+    JWT_SECRET_KEY: str = "change-me-in-production"
     SAMU_PHONE_NUMBER: str = "15"
 
     model_config = SettingsConfigDict(

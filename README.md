@@ -289,6 +289,30 @@ GET /api/v1/questionnaire/template
 POST /api/v1/recommendations/
 ```
 
+### Authentification
+
+```http
+POST /api/v1/auth/login
+```
+
+L'endpoint renvoie un **jeton JWT** (algorithme HS256, expiration 60 min) :
+
+```json
+{
+  "username": "admin",
+  "password": "admin123"
+}
+```
+
+Réponse :
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "bearer"
+}
+```
+
 ### Administration
 
 ```http
@@ -298,6 +322,8 @@ GET /api/v1/admin/genai-cache
 GET /api/v1/admin/history
 GET /api/v1/admin/metrics
 ```
+
+Tous les endpoints `/admin/*` sont **protégés** : il faut transmettre le jeton JWT dans l'en-tête HTTP `Authorization: Bearer <access_token>`. Une requête sans jeton (ou avec un jeton invalide) renvoie `401 Unauthorized`.
 
 ---
 
@@ -397,8 +423,11 @@ CACHE_ENABLED=true
 TOP_K_RECOMMENDATIONS=3
 SIMILARITY_THRESHOLD=0.35
 ADMIN_PASSWORD=admin123
+JWT_SECRET_KEY=change-me-in-production
 SAMU_PHONE_NUMBER=15
 ```
+
+> Le mot de passe administrateur (`ADMIN_PASSWORD`) et la clé de signature des jetons (`JWT_SECRET_KEY`) sont injectés via les variables d'environnement et ne sont jamais codés en dur. En production, `JWT_SECRET_KEY` doit être remplacée par une valeur aléatoire forte.
 
 ### 3. Lancer avec Docker
 
@@ -530,7 +559,7 @@ Le panel admin MABOU permet d’accéder à :
 ## Perspectives d’amélioration
 
 - enrichissement du référentiel médical,
-- ajout d’un vrai système d’authentification admin,
+- gestion multi-utilisateurs et rôles (au-delà du compte admin unique JWT actuel),
 - historisation plus fine des tokens et coûts,
 - personnalisation par profil patient,
 - export PDF des analyses,

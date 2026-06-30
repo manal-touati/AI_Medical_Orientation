@@ -7,7 +7,6 @@ import requests
 import streamlit as st
 
 API_URL = os.getenv("API_URL", "http://localhost:8000/api/v1")
-ADMIN_PASSWORD = os.getenv("MABOU_ADMIN_PASSWORD", "admin123")
 
 GENERIC_EXPLANATION_MARKERS = [
     "may be relevant based on the semantic similarity",
@@ -32,9 +31,12 @@ def api_get(path: str) -> Any:
 
 
 def api_get_admin(path: str) -> Any:
+    token = st.session_state.get("admin_token")
+    if not token:
+        raise RuntimeError("Non authentifié.")
     response = requests.get(
         f"{API_URL}{path}",
-        headers={"X-Admin-Key": ADMIN_PASSWORD},
+        headers={"Authorization": f"Bearer {token}"},
         timeout=30,
     )
     response.raise_for_status()
@@ -311,11 +313,20 @@ def render_header() -> None:
         with st.popover("Connexion admin"):
             password = st.text_input("Mot de passe", type="password", key="admin_password_input")
             if st.button("Se connecter", use_container_width=True):
-                if password == ADMIN_PASSWORD:
-                    st.session_state["admin_authenticated"] = True
-                    st.success("Connexion admin réussie.")
-                else:
-                    st.error("Mot de passe invalide.")
+                try:
+                    resp = requests.post(
+                        f"{API_URL}/auth/login",
+                        json={"username": "admin", "password": password},
+                        timeout=10,
+                    )
+                    if resp.status_code == 200:
+                        st.session_state["admin_authenticated"] = True
+                        st.session_state["admin_token"] = resp.json()["access_token"]
+                        st.success("Connexion admin réussie.")
+                    else:
+                        st.error("Mot de passe invalide.")
+                except Exception:
+                    st.error("Impossible de joindre l'API.")
 
     st.markdown(
         """
@@ -333,83 +344,30 @@ def render_header() -> None:
 
 
 def render_sidebar() -> None:
-    st.sidebar.markdown("## Configuration")
     api_ok, api_message = get_api_status()
     if api_ok:
-        st.sidebar.success(api_message)
+        st.sidebar.success(f"API disponible")
     else:
-        st.sidebar.error(api_message)
+        st.sidebar.error(f"API non joignable")
 
-    st.sidebar.markdown(
-        """
-        <div class="glass-card">
-            <div class="micro-title">Objet</div>
-            <div class="small-note">
-                Application d’orientation médicale indicative basée sur un moteur sémantique,
-                des règles métier et des signaux d’alerte.
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    st.sidebar.error(
+        "Cette application ne pose aucun diagnostic medical. "
+        "Orientation indicative uniquement. "
+        "Urgence : appelez le 15 (SAMU)."
     )
 
-    st.sidebar.markdown(
-        """
-        <div class="glass-card">
-            <div class="micro-title">Avertissement</div>
-            <div class="small-note">
-                Cette interface n’établit pas de diagnostic. En cas d’urgence ou de doute important,
-                contactez immédiatement un professionnel de santé.
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.sidebar.markdown("## Exemples")
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("**Exemples de saisie**")
     examples = [
         "Douleur thoracique, essoufflement, palpitations",
-        "Constipation avec ballonnements et douleurs abdominales",
-        "Tristesse persistante, anxiété, insomnie",
-        "Douleur pelvienne et saignement inhabituel",
+        "Constipation, ballonnements, douleurs abdominales",
+        "Tristesse persistante, insomnie, anxiete",
+        "Douleur pelvienne, saignement inhabituel",
     ]
     for item in examples:
-        st.sidebar.caption(f"• {item}")
+        st.sidebar.caption(f"- {item}")
 
-    st.sidebar.markdown("## Limites & biais")
-    with st.sidebar.expander("Voir les limites du système", expanded=False):
-        st.markdown(
-            """
-            **Couverture médicale limitée**
-            Le référentiel couvre 15 spécialités et 40+ symptômes canoniques.
-            Les pathologies rares ou atypiques peuvent ne pas être correctement orientées.
-
-            **Dépendance à la saisie**
-            La qualité de l'orientation dépend directement de la précision de la description
-            fournie par l'utilisateur. Une saisie vague ou incomplète réduit la pertinence des résultats.
-
-            **Biais linguistiques du modèle SBERT**
-            Le modèle `paraphrase-multilingual-MiniLM-L12-v2` peut présenter des biais liés
-            au corpus d'entraînement (surreprésentation de certaines langues ou contextes médicaux).
-
-            **Détection des red flags basée sur des mots-clés**
-            Les signaux critiques sont détectés par correspondance textuelle.
-            Des présentations atypiques ou des formulations inhabituelles peuvent entraîner des
-            faux négatifs — c'est-à-dire des urgences non détectées.
-
-            **Explications générées par LLM**
-            Les explications produites par OpenAI peuvent varier selon le contexte et comporter
-            des imprécisions. Elles ne sont pas validées par des professionnels de santé.
-
-            **Absence de contexte patient**
-            Le système ne tient pas compte des antécédents médicaux, des traitements en cours,
-            des allergies ou de l'âge — des facteurs pourtant déterminants en médecine clinique.
-
-            **Usage indicatif uniquement**
-            Ce système n'est pas un dispositif médical certifié.
-            Il ne remplace en aucun cas une consultation médicale.
-            """
-        )
+    st.sidebar.markdown("---")
 
 
 def render_red_flag_alert(red_flags: list[dict], warning_text: str) -> None:
@@ -757,9 +715,9 @@ def render_admin_panel() -> None:
                 ].rename(columns={
                     "value": "temperature",
                     "case_id": "cas",
-                    "output_length": "longueur réponse",
+                    "output_length": "longueur",
                     "total_tokens": "tokens",
-                    "response_time_ms": "temps (ms)",
+                    "response_time_ms": "duree (ms)",
                     "output_preview": "aperçu",
                 })
                 st.dataframe(df_temp, use_container_width=True, height=340)
@@ -769,14 +727,14 @@ def render_admin_panel() -> None:
                     .mark_bar()
                     .encode(
                         x=alt.X("temperature:O", title="Température"),
-                        y=alt.Y("longueur réponse:Q", title="Longueur moyenne (caractères)"),
+                        y=alt.Y("longueur:Q", title="Longueur (caractères)"),
                         color=alt.Color("cas:N", title="Cas"),
-                        column=alt.Column("cas:N", title=""),
-                        tooltip=["temperature", "cas", "longueur réponse", "tokens", "temps (ms)"],
+                        xOffset=alt.XOffset("cas:N"),
+                        tooltip=["temperature", "cas", "longueur", "tokens", "duree (ms)"],
                     )
-                    .properties(height=220, title="Longueur des réponses par température")
+                    .properties(height=280, width=480, title="Longueur des réponses par température")
                 )
-                st.altair_chart(chart_temp)
+                st.altair_chart(chart_temp, use_container_width=True)
 
         with tab_thresh:
             st.caption(f"**Justification :** {justif.get('similarity_threshold', '')}")
@@ -788,7 +746,14 @@ def render_admin_panel() -> None:
                     "specialties_above_threshold": "spécialités retenues",
                     "note": "observation",
                 })
-                st.dataframe(df_thresh[["seuil", "cas", "spécialités retenues", "observation"]], use_container_width=True, height=340)
+                st.dataframe(
+                    df_thresh[["seuil", "cas", "spécialités retenues", "observation"]],
+                    column_config={
+                        "observation": st.column_config.TextColumn("observation", width="large", max_chars=55),
+                    },
+                    use_container_width=True,
+                    height=340,
+                )
 
                 chart_thresh = (
                     alt.Chart(df_thresh)
@@ -844,7 +809,7 @@ def render_admin_panel() -> None:
                 "Notes": ev.get("notes", ""),
             })
 
-        df_quality = pd.DataFrame(rows)
+        df_quality = pd.DataFrame(rows).drop(columns=["Notes"])
         st.dataframe(df_quality, use_container_width=True, height=180)
 
         radar_rows = []
@@ -861,15 +826,15 @@ def render_admin_panel() -> None:
             alt.Chart(df_radar)
             .mark_bar()
             .encode(
-                x=alt.X("Critère:N", title="Critère"),
+                x=alt.X("Critère:N", title="Critère", axis=alt.Axis(labelAngle=-30)),
                 y=alt.Y("Score:Q", scale=alt.Scale(domain=[0, 5]), title="Score (/ 5)"),
                 color=alt.Color("Cas:N", title="Cas"),
-                column=alt.Column("Cas:N", title=""),
+                xOffset=alt.XOffset("Cas:N"),
                 tooltip=["Critère", "Score", "Cas"],
             )
-            .properties(height=220, title="Scores par critère et par cas")
+            .properties(height=280, title="Scores par critère et par cas")
         )
-        st.altair_chart(bar_quality)
+        st.altair_chart(bar_quality, use_container_width=True)
 
         st.markdown(
             f"""
@@ -950,7 +915,7 @@ def main() -> None:
     st.set_page_config(
         page_title="MABOU",
         layout="wide",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="collapsed",
     )
 
     render_styles()

@@ -37,7 +37,6 @@ services:
       - api
     environment:
      API_URL: http://api:8000/api/v1
-     MABOU_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     ports:
       - "8501:8501"
     volumes:

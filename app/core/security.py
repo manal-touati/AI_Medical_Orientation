@@ -1,24 +1,51 @@
 import secrets
+from datetime import datetime, timedelta, timezone
+from typing import Optional
 
-from fastapi import Depends, HTTPException, Security, status
-from fastapi.security import APIKeyHeader
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jose import JWTError, jwt
 
 from app.core.config import settings
 
-_api_key_header = APIKeyHeader(name="X-Admin-Key", auto_error=False)
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
+
+_bearer_scheme = HTTPBearer(auto_error=False)
 
 
-def verify_admin(api_key: str | None = Security(_api_key_header)) -> str:
+def create_access_token(subject: str = "admin") -> str:
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    payload = {"sub": subject, "exp": expire}
+    return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=ALGORITHM)
+
+
+def verify_admin(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_bearer_scheme),
+) -> str:
     """
-    Dépendance FastAPI — vérifie le header X-Admin-Key sur les routes /admin/*.
-    Retourne "admin" si valide, lève une 401 sinon.
+    Dépendance FastAPI — vérifie le Bearer JWT sur les routes /admin/*.
+    Retourne le subject ("admin") si valide, lève une 401 sinon.
     """
-    if api_key is None or not secrets.compare_digest(
-        api_key.encode("utf-8"),
-        settings.ADMIN_PASSWORD.encode("utf-8"),
-    ):
+    if credentials is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Header X-Admin-Key manquant ou invalide.",
+            detail="Token d'authentification manquant.",
+            headers={"WWW-Authenticate": "Bearer"},
         )
-    return "admin"
+    try:
+        payload = jwt.decode(
+            credentials.credentials,
+            settings.JWT_SECRET_KEY,
+            algorithms=[ALGORITHM],
+        )
+        subject: str = payload.get("sub")
+        if subject != "admin":
+            raise JWTError()
+        return subject
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token invalide ou expiré.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
