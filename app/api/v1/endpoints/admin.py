@@ -1,18 +1,23 @@
+import json
+import os
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import desc, func
 from sqlalchemy.orm import Session
 
+from app.core.security import verify_admin
 from app.db.session import get_db
 from app.models.genai_cache import GenAICache
 from app.models.recommendation_result import RecommendationResult
 from app.models.request_audit import RequestAudit
 from app.models.user_response import UserResponse
+from app.repositories.feedback_repository import FeedbackRepository
 
 router = APIRouter()
 
 
 @router.get("/responses")
-def list_responses(db: Session = Depends(get_db)):
+def list_responses(db: Session = Depends(get_db), _: str = Depends(verify_admin)):
     rows = db.query(UserResponse).order_by(desc(UserResponse.id)).limit(50).all()
 
     return [
@@ -30,7 +35,7 @@ def list_responses(db: Session = Depends(get_db)):
 
 
 @router.get("/recommendations")
-def list_recommendations(db: Session = Depends(get_db)):
+def list_recommendations(db: Session = Depends(get_db), _: str = Depends(verify_admin)):
     rows = db.query(RecommendationResult).order_by(desc(RecommendationResult.id)).limit(100).all()
 
     return [
@@ -47,7 +52,7 @@ def list_recommendations(db: Session = Depends(get_db)):
 
 
 @router.get("/genai-cache")
-def list_genai_cache(db: Session = Depends(get_db)):
+def list_genai_cache(db: Session = Depends(get_db), _: str = Depends(verify_admin)):
     rows = db.query(GenAICache).order_by(desc(GenAICache.id)).limit(100).all()
 
     return [
@@ -64,7 +69,7 @@ def list_genai_cache(db: Session = Depends(get_db)):
 
 
 @router.get("/history")
-def request_history(db: Session = Depends(get_db)):
+def request_history(db: Session = Depends(get_db), _: str = Depends(verify_admin)):
     rows = db.query(RequestAudit).order_by(desc(RequestAudit.id)).limit(200).all()
 
     return [
@@ -87,7 +92,7 @@ def request_history(db: Session = Depends(get_db)):
 
 
 @router.get("/metrics")
-def admin_metrics(db: Session = Depends(get_db)):
+def admin_metrics(db: Session = Depends(get_db), _: str = Depends(verify_admin)):
     total_requests = db.query(func.count(RequestAudit.id)).scalar() or 0
     avg_latency = db.query(func.avg(RequestAudit.response_time_ms)).scalar() or 0
     total_prompt_tokens = db.query(func.coalesce(func.sum(RequestAudit.prompt_tokens), 0)).scalar() or 0
@@ -111,6 +116,8 @@ def admin_metrics(db: Session = Depends(get_db)):
             "prompt_tokens": int(total_prompt_tokens),
             "completion_tokens": int(total_completion_tokens),
             "total_tokens": int(total_tokens),
+            "total_cache_hits": int(total_cache_hits),
+            "total_cache_misses": int(total_cache_misses),
             "cache_entries": int(cache_entries),
             "cache_hit_ratio_percent": cache_hit_ratio,
             "samu_alert_count": int(total_samu),
@@ -130,3 +137,28 @@ def admin_metrics(db: Session = Depends(get_db)):
             for row in latest
         ]
     }
+
+
+@router.get("/feedback-stats")
+def feedback_stats(db: Session = Depends(get_db), _: str = Depends(verify_admin)):
+    return FeedbackRepository(db).get_stats()
+
+
+@router.get("/param-evaluation")
+def param_evaluation(_: str = Depends(verify_admin)):
+    path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "data", "param_evaluation_results.json")
+    path = os.path.normpath(path)
+    if not os.path.exists(path):
+        return {"error": "Aucun résultat disponible. Lancez scripts/evaluate_genai_params.py."}
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@router.get("/genai-evaluation")
+def genai_quality_evaluation(_: str = Depends(verify_admin)):
+    path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "data", "genai_quality_evaluation.json")
+    path = os.path.normpath(path)
+    if not os.path.exists(path):
+        return {"error": "Fichier genai_quality_evaluation.json introuvable."}
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)

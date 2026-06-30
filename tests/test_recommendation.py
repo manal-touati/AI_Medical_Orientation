@@ -16,6 +16,7 @@ def test_recommendation_endpoint_success():
     }
 
     mocked_response = {
+        "user_response_id": 1,
         "enriched_input": None,
         "recommendations": [
             {
@@ -36,7 +37,19 @@ def test_recommendation_endpoint_success():
                 "message": "Chest pain may require urgent medical attention."
             }
         ],
-        "warning": "This result is an indicative orientation only and not a medical diagnosis."
+        "warning": "This result is an indicative orientation only and not a medical diagnosis.",
+        "detected_symptoms": [
+            {
+                "canonical_name": "chest pain",
+                "matched_terms": ["chest pain"],
+                "category": "cardiovascular",
+                "severity_hint": "high",
+                "body_zone": "chest",
+                "specialties": ["Cardiology", "Pulmonology"],
+                "is_red_flag": True,
+                "red_flag_message": "Chest pain may require urgent medical attention."
+            }
+        ]
     }
 
     with patch("app.api.v1.endpoints.recommendation.RecommendationService.recommend", return_value=mocked_response):
@@ -51,3 +64,6 @@ def test_recommendation_endpoint_success():
     assert data["recommendations"][0]["specialty_name"] == "Cardiology"
     assert "warning" in data
     assert "red_flags" in data
+    assert "detected_symptoms" in data
+    assert data["detected_symptoms"][0]["canonical_name"] == "chest pain"
+    assert data["user_response_id"] == 1

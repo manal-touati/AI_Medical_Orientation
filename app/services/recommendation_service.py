@@ -231,6 +231,7 @@ class RecommendationService:
         )
 
         return {
+            "user_response_id": user_response.id,
             "enriched_input": enriched_text,
             "recommendations": results,
             "red_flags": detected_red_flags,

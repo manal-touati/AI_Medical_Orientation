@@ -31,6 +31,16 @@ def api_get(path: str) -> Any:
     return response.json()
 
 
+def api_get_admin(path: str) -> Any:
+    response = requests.get(
+        f"{API_URL}{path}",
+        headers={"X-Admin-Key": ADMIN_PASSWORD},
+        timeout=30,
+    )
+    response.raise_for_status()
+    return response.json()
+
+
 def api_post(path: str, payload: dict[str, Any]) -> Any:
     response = requests.post(f"{API_URL}{path}", json=payload, timeout=90)
     response.raise_for_status()
@@ -366,6 +376,41 @@ def render_sidebar() -> None:
     for item in examples:
         st.sidebar.caption(f"• {item}")
 
+    st.sidebar.markdown("## Limites & biais")
+    with st.sidebar.expander("Voir les limites du système", expanded=False):
+        st.markdown(
+            """
+            **Couverture médicale limitée**
+            Le référentiel couvre 15 spécialités et 40+ symptômes canoniques.
+            Les pathologies rares ou atypiques peuvent ne pas être correctement orientées.
+
+            **Dépendance à la saisie**
+            La qualité de l'orientation dépend directement de la précision de la description
+            fournie par l'utilisateur. Une saisie vague ou incomplète réduit la pertinence des résultats.
+
+            **Biais linguistiques du modèle SBERT**
+            Le modèle `paraphrase-multilingual-MiniLM-L12-v2` peut présenter des biais liés
+            au corpus d'entraînement (surreprésentation de certaines langues ou contextes médicaux).
+
+            **Détection des red flags basée sur des mots-clés**
+            Les signaux critiques sont détectés par correspondance textuelle.
+            Des présentations atypiques ou des formulations inhabituelles peuvent entraîner des
+            faux négatifs — c'est-à-dire des urgences non détectées.
+
+            **Explications générées par LLM**
+            Les explications produites par OpenAI peuvent varier selon le contexte et comporter
+            des imprécisions. Elles ne sont pas validées par des professionnels de santé.
+
+            **Absence de contexte patient**
+            Le système ne tient pas compte des antécédents médicaux, des traitements en cours,
+            des allergies ou de l'âge — des facteurs pourtant déterminants en médecine clinique.
+
+            **Usage indicatif uniquement**
+            Ce système n'est pas un dispositif médical certifié.
+            Il ne remplace en aucun cas une consultation médicale.
+            """
+        )
+
 
 def render_red_flag_alert(red_flags: list[dict], warning_text: str) -> None:
     if not red_flags:
@@ -529,22 +574,35 @@ def render_meta(meta: dict[str, Any]) -> None:
     if not meta:
         return
 
+    cache_hits = meta.get("cache_hits", 0)
+    cache_misses = meta.get("cache_misses", 0)
+    total_tokens = meta.get("total_tokens", 0)
+    tokens_saved = round((total_tokens / max(cache_misses, 1)) * cache_hits) if cache_hits else 0
+
     st.markdown('<div class="section-title">Indicateurs d’exécution</div>', unsafe_allow_html=True)
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Temps de réponse", f"{meta.get('response_time_ms', 0)} ms")
-    c2.metric("Jetons consommés", meta.get("total_tokens", 0))
-    c3.metric("Cache hits", meta.get("cache_hits", 0))
-    c4.metric("Cache misses", meta.get("cache_misses", 0))
+    c2.metric("Jetons consommés", total_tokens)
+    c3.metric("Cache hits", cache_hits)
+    c4.metric("Cache misses", cache_misses)
+    c5.metric("Jetons économisés", tokens_saved)
 
 
 def render_admin_panel() -> None:
     st.markdown('<div class="section-title">Panel Admin — Monitoring avancé</div>', unsafe_allow_html=True)
 
-    metrics_data = api_get("/admin/metrics")
-    history = api_get("/admin/history")
-    cache_rows = api_get("/admin/genai-cache")
+    metrics_data = api_get_admin("/admin/metrics")
+    history = api_get_admin("/admin/history")
+    cache_rows = api_get_admin("/admin/genai-cache")
+    feedback_stats = api_get_admin("/admin/feedback-stats")
 
     kpis = metrics_data["kpis"]
+    cache_hits_total = kpis.get("total_cache_hits", 0)
+    cache_misses_total = kpis.get("total_cache_misses", 0)
+    tokens_total = kpis.get("total_tokens", 0)
+    tokens_saved_total = round(
+        (tokens_total / max(cache_misses_total, 1)) * cache_hits_total
+    ) if cache_hits_total else 0
     history_df = pd.DataFrame(history)
     if not history_df.empty:
         history_df["created_at"] = pd.to_datetime(history_df["created_at"])
@@ -557,10 +615,17 @@ def render_admin_panel() -> None:
     top4.metric("Entrées cache", kpis["cache_entries"])
     top5.metric("Alertes SAMU", kpis["samu_alert_count"])
 
-    mid1, mid2, mid3 = st.columns(3)
+    mid1, mid2, mid3, mid4, mid5 = st.columns(5)
     mid1.metric("Prompt tokens", kpis["prompt_tokens"])
     mid2.metric("Completion tokens", kpis["completion_tokens"])
     mid3.metric("Taux cache hit", f"{kpis['cache_hit_ratio_percent']} %")
+    mid4.metric("Feedbacks reçus", feedback_stats["total_feedback"])
+    mid5.metric("Satisfaction", f"{feedback_stats['positive_ratio_percent']} %")
+
+    bot1, bot2, bot3 = st.columns(3)
+    bot1.metric("Appels LLM économisés", kpis["total_cache_hits"])
+    bot2.metric("Jetons économisés (estimé)", tokens_saved_total)
+    bot3.metric("Coût évité (estimé)", f"${round(tokens_saved_total * 0.00000060, 4)}")
 
     if history_df.empty:
         st.info("Aucune donnée de monitoring disponible pour le moment.")
@@ -656,6 +721,197 @@ def render_admin_panel() -> None:
 
     st.markdown('<div class="section-title">État du cache IA</div>', unsafe_allow_html=True)
     st.dataframe(pd.DataFrame(cache_rows), use_container_width=True, height=240)
+
+    # ------------------------------------------------------------------
+    # Évaluation des paramètres GenAI
+    # ------------------------------------------------------------------
+    st.markdown('<div class="section-title">Évaluation des paramètres GenAI</div>', unsafe_allow_html=True)
+
+    try:
+        eval_data = api_get_admin("/admin/param-evaluation")
+    except Exception:
+        eval_data = None
+
+    if not eval_data or "error" in eval_data:
+        st.info("Aucun résultat d'évaluation disponible. Lancez `docker compose exec api python scripts/evaluate_genai_params.py`.")
+    else:
+        chosen = eval_data.get("chosen_parameters", {})
+        justif = eval_data.get("justification", {})
+
+        st.markdown(f"**Modèle évalué :** `{eval_data.get('model', '—')}` — évaluation du `{eval_data.get('evaluated_at', '—')[:10]}`")
+
+        p1, p2, p3, p4 = st.columns(4)
+        p1.metric("temperature retenue", chosen.get("temperature"))
+        p2.metric("similarity_threshold retenu", chosen.get("similarity_threshold"))
+        p3.metric("min_words_threshold", chosen.get("genai_min_words_threshold"))
+        p4.metric("top_k_recommendations", chosen.get("top_k_recommendations"))
+
+        tab_temp, tab_thresh = st.tabs(["Comparaison temperature", "Comparaison similarity_threshold"])
+
+        with tab_temp:
+            st.caption(f"**Justification :** {justif.get('temperature', '')}")
+            temp_rows = eval_data.get("temperature_results", [])
+            if temp_rows:
+                df_temp = pd.DataFrame(temp_rows)[
+                    ["value", "case_id", "output_length", "total_tokens", "response_time_ms", "output_preview"]
+                ].rename(columns={
+                    "value": "temperature",
+                    "case_id": "cas",
+                    "output_length": "longueur réponse",
+                    "total_tokens": "tokens",
+                    "response_time_ms": "temps (ms)",
+                    "output_preview": "aperçu",
+                })
+                st.dataframe(df_temp, use_container_width=True, height=340)
+
+                chart_temp = (
+                    alt.Chart(df_temp)
+                    .mark_bar()
+                    .encode(
+                        x=alt.X("temperature:O", title="Température"),
+                        y=alt.Y("longueur réponse:Q", title="Longueur moyenne (caractères)"),
+                        color=alt.Color("cas:N", title="Cas"),
+                        column=alt.Column("cas:N", title=""),
+                        tooltip=["temperature", "cas", "longueur réponse", "tokens", "temps (ms)"],
+                    )
+                    .properties(height=220, title="Longueur des réponses par température")
+                )
+                st.altair_chart(chart_temp)
+
+        with tab_thresh:
+            st.caption(f"**Justification :** {justif.get('similarity_threshold', '')}")
+            thresh_rows = eval_data.get("threshold_results", [])
+            if thresh_rows:
+                df_thresh = pd.DataFrame(thresh_rows).rename(columns={
+                    "value": "seuil",
+                    "case_id": "cas",
+                    "specialties_above_threshold": "spécialités retenues",
+                    "note": "observation",
+                })
+                st.dataframe(df_thresh[["seuil", "cas", "spécialités retenues", "observation"]], use_container_width=True, height=340)
+
+                chart_thresh = (
+                    alt.Chart(df_thresh)
+                    .mark_line(point=True)
+                    .encode(
+                        x=alt.X("seuil:O", title="Seuil de similarité"),
+                        y=alt.Y("spécialités retenues:Q", title="Nombre de spécialités retenues"),
+                        color=alt.Color("cas:N", title="Cas"),
+                        tooltip=["seuil", "cas", "spécialités retenues", "observation"],
+                    )
+                    .properties(height=260, title="Impact du seuil sur le nombre de spécialités retenues")
+                )
+                st.altair_chart(chart_thresh, use_container_width=True)
+
+    # ------------------------------------------------------------------
+    # Grille d'évaluation qualitative des sorties GenAI
+    # ------------------------------------------------------------------
+    st.markdown('<div class="section-title">Grille d\'évaluation qualitative des sorties GenAI</div>', unsafe_allow_html=True)
+
+    try:
+        eval_quality = api_get_admin("/admin/genai-evaluation")
+    except Exception:
+        eval_quality = None
+
+    if not eval_quality or "error" in eval_quality:
+        st.info("Aucune grille disponible.")
+    else:
+        st.markdown(
+            f"**Modèle :** `{eval_quality.get('model')}` — température `{eval_quality.get('temperature')}` "
+            f"— évaluation du `{eval_quality.get('evaluated_at')}` — "
+            f"**Score moyen global : {eval_quality.get('overall_average')} / 5**"
+        )
+        st.caption(f"**Méthodologie :** {eval_quality.get('methodology', '')}")
+
+        criteria_desc = eval_quality.get("criteria_description", {})
+        with st.expander("Définition des critères d'évaluation"):
+            for crit, desc in criteria_desc.items():
+                st.markdown(f"- **{crit.replace('_', ' ').capitalize()}** : {desc}")
+            st.caption(f"Échelle : {eval_quality.get('scale', '')}")
+
+        rows = []
+        for ev in eval_quality.get("evaluations", []):
+            scores = ev.get("scores", {})
+            rows.append({
+                "Cas": ev["case_id"],
+                "Spécialité": ev["specialty"],
+                "Pertinence": scores.get("pertinence"),
+                "Neutralité": scores.get("neutralite"),
+                "Clarté": scores.get("clarte"),
+                "Sans hallucination": scores.get("absence_hallucination"),
+                "Valeur ajoutée": scores.get("valeur_ajoutee"),
+                "Moyenne": ev.get("average"),
+                "Notes": ev.get("notes", ""),
+            })
+
+        df_quality = pd.DataFrame(rows)
+        st.dataframe(df_quality, use_container_width=True, height=180)
+
+        radar_rows = []
+        for ev in eval_quality.get("evaluations", []):
+            scores = ev.get("scores", {})
+            for crit, score in scores.items():
+                radar_rows.append({
+                    "Critère": crit.replace("_", " ").capitalize(),
+                    "Score": score,
+                    "Cas": ev["case_id"],
+                })
+        df_radar = pd.DataFrame(radar_rows)
+        bar_quality = (
+            alt.Chart(df_radar)
+            .mark_bar()
+            .encode(
+                x=alt.X("Critère:N", title="Critère"),
+                y=alt.Y("Score:Q", scale=alt.Scale(domain=[0, 5]), title="Score (/ 5)"),
+                color=alt.Color("Cas:N", title="Cas"),
+                column=alt.Column("Cas:N", title=""),
+                tooltip=["Critère", "Score", "Cas"],
+            )
+            .properties(height=220, title="Scores par critère et par cas")
+        )
+        st.altair_chart(bar_quality)
+
+        st.markdown(
+            f"""
+            <div class="info-box">
+                <strong>Conclusion de l'évaluation</strong><br>
+                {eval_quality.get('conclusion', '')}<br><br>
+                <strong>Mesure de mitigation</strong><br>
+                {eval_quality.get('risk_mitigation', '')}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+def render_feedback(user_response_id: int) -> None:
+    st.markdown('<div class="section-title">Cette orientation vous a-t-elle aidé ?</div>', unsafe_allow_html=True)
+
+    feedback_key = f"feedback_sent_{user_response_id}"
+
+    if st.session_state.get(feedback_key):
+        st.success("Merci pour votre retour !")
+        return
+
+    col_yes, col_no, col_empty = st.columns([0.18, 0.18, 0.64])
+
+    with col_yes:
+        if st.button("👍 Oui", use_container_width=True, key=f"fb_yes_{user_response_id}"):
+            try:
+                api_post(f"/recommendations/{user_response_id}/feedback", {"is_helpful": True})
+                st.session_state[feedback_key] = True
+                st.rerun()
+            except Exception:
+                st.error("Erreur lors de l'envoi du feedback.")
+
+    with col_no:
+        if st.button("👎 Non", use_container_width=True, key=f"fb_no_{user_response_id}"):
+            try:
+                api_post(f"/recommendations/{user_response_id}/feedback", {"is_helpful": False})
+                st.session_state[feedback_key] = True
+                st.rerun()
+            except Exception:
+                st.error("Erreur lors de l'envoi du feedback.")
 
 
 def build_dynamic_hints(profile: str) -> tuple[list[str], str]:
@@ -833,6 +1089,11 @@ def main() -> None:
 
         with bottom_right:
             render_detected_symptoms(last_result.get("detected_symptoms", []))
+
+        user_response_id = last_result.get("user_response_id")
+        if user_response_id:
+            st.divider()
+            render_feedback(user_response_id)
 
     if st.session_state.get("admin_authenticated"):
         st.divider()

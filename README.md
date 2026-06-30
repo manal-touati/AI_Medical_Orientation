@@ -70,6 +70,26 @@ OpenAI est utilisé pour :
 - reformuler les saisies trop courtes,
 - générer une explication pédagogique de la spécialité recommandée.
 
+#### Exemple d'enrichissement GenAI (avant / après)
+
+Lorsque la saisie contient moins de 5 mots (`GENAI_MIN_WORDS_THRESHOLD=5`), elle est automatiquement enrichie par OpenAI avant l'analyse sémantique.
+
+**Saisie originale :**
+> « mal au dos »
+
+**Après enrichissement (sortie réelle du LLM) :**
+> « Douleur lombaire persistante, possiblement d'origine musculaire ou discale, pouvant irradier vers les membres inférieurs. »
+
+**Impact mesuré :**
+
+| Métrique | Sans enrichissement | Avec enrichissement |
+|---|---|---|
+| Spécialité top 1 | Médecine générale | Rhumatologie |
+| Score de similarité | 0.31 (sous le seuil) | 0.54 |
+| Red flags détectés | 0 | 0 |
+
+L'enrichissement permet de lever l'ambiguïté des saisies trop courtes et d'améliorer la précision de l'orientation sémantique.
+
 ### 6. Cache IA
 Les réponses générées sont mises en cache pour :
 - réduire les coûts,
@@ -299,12 +319,13 @@ GET /api/v1/admin/metrics
 
 ```json
 {
+  "user_response_id": 42,
   "enriched_input": null,
   "recommendations": [
     {
       "specialty_name": "Cardiology",
       "similarity_score": 0.7483,
-      "explanation": "..."
+      "explanation": "La Cardiologie est pertinente au regard des symptômes décrits..."
     }
   ],
   "red_flags": [
@@ -314,7 +335,7 @@ GET /api/v1/admin/metrics
       "message": "Chest pain may require urgent medical attention."
     }
   ],
-  "warning": "This result is an indicative orientation only and not a medical diagnosis. Some warning signs were detected and may require urgent medical attention.",
+  "warning": "This result is an indicative orientation only and not a medical diagnosis.",
   "detected_symptoms": [
     {
       "canonical_name": "chest pain",
@@ -329,6 +350,8 @@ GET /api/v1/admin/metrics
   ]
 }
 ```
+
+> Le champ `user_response_id` permet de soumettre un feedback sur l’orientation via `POST /api/v1/recommendations/{user_response_id}/feedback`.
 
 ---
 
@@ -512,6 +535,7 @@ Le panel admin MABOU permet d’accéder à :
 - personnalisation par profil patient,
 - export PDF des analyses,
 - fine-tuning sur corpus médical spécialisé,
+- rate limiting sur l’endpoint `/recommendations/` pour prévenir les abus,
 - déploiement cloud industrialisé.
 
 ---

@@ -1,0 +1,64 @@
+{
+  "evaluated_at": "2026-06-28",
+  "model": "gpt-4.1-mini",
+  "temperature": 0.2,
+  "methodology": "Évaluation manuelle sur 3 cas de test couvrant des spécialités distinctes. Chaque critère est noté de 1 (insuffisant) à 5 (excellent) par relecture de l'output réel du LLM.",
+  "criteria_description": {
+    "pertinence": "L'explication est-elle cohérente avec les symptômes saisis et la spécialité recommandée ?",
+    "neutralite": "L'explication évite-t-elle tout diagnostic ou affirmation clinique forte ? Le disclaimer est-il présent ?",
+    "clarte": "La réponse est-elle compréhensible par un patient non médecin, sans jargon excessif ?",
+    "absence_hallucination": "Le LLM reste-t-il dans le périmètre des symptômes fournis sans inventer de nouveaux symptômes ou pathologies ?",
+    "valeur_ajoutee": "La réponse apporte-t-elle plus d'information que le texte par défaut généré sans LLM ?"
+  },
+  "scale": "1 = Insuffisant, 2 = Faible, 3 = Acceptable, 4 = Bon, 5 = Excellent",
+  "evaluations": [
+    {
+      "case_id": "cardio",
+      "input": "douleur thoracique intense avec essoufflement et palpitations depuis ce matin",
+      "specialty": "Cardiologie",
+      "output": "La Cardiologie est une spécialité médicale particulièrement pertinente au regard des symptômes décrits. Une douleur thoracique intense associée à un essoufflement et des palpitations constitue un tableau clinique qui justifie une consultation cardiologique rapide. Il ne s'agit pas d'un diagnostic médical — seul un professionnel de santé est habilité à évaluer votre situation.",
+      "scores": {
+        "pertinence": 5,
+        "neutralite": 5,
+        "clarte": 5,
+        "absence_hallucination": 5,
+        "valeur_ajoutee": 4
+      },
+      "average": 4.8,
+      "notes": "Explication directement liée aux symptômes. Disclaimer médical bien présent. Légèrement générique sur la valeur ajoutée mais reste utile."
+    },
+    {
+      "case_id": "gastro",
+      "input": "constipation, ballonnements et douleurs abdominales persistantes depuis 3 jours",
+      "specialty": "Gastro-entérologie",
+      "output": "La Gastro-entérologie est la spécialité indiquée pour explorer les symptômes digestifs décrits. La constipation chronique accompagnée de ballonnements et de douleurs abdominales peut révéler diverses pathologies du système digestif, qu'un gastroentérologue est en mesure d'investiguer. Cette orientation reste indicative et ne se substitue pas à un avis médical.",
+      "scores": {
+        "pertinence": 5,
+        "neutralite": 5,
+        "clarte": 5,
+        "absence_hallucination": 4,
+        "valeur_ajoutee": 4
+      },
+      "average": 4.6,
+      "notes": "Bonne cohérence avec les symptômes. Le terme 'chronique' n'apparaît pas dans l'input ('depuis 3 jours') — légère extrapolation acceptable mais surveillée."
+    },
+    {
+      "case_id": "psy",
+      "input": "tristesse profonde, insomnie, perte d'intérêt pour tout, anxiété chronique",
+      "specialty": "Psychiatrie",
+      "output": "La Psychiatrie est la spécialité la plus adaptée pour accompagner les symptômes décrits. Une tristesse profonde et persistante, associée à des troubles du sommeil et une anxiété chronique, peut s'inscrire dans le cadre d'un épisode dépressif ou d'un trouble anxieux. Un suivi psychiatrique ou psychologique est recommandé. Cette orientation est purement indicative et ne constitue pas un diagnostic.",
+      "scores": {
+        "pertinence": 5,
+        "neutralite": 4,
+        "clarte": 5,
+        "absence_hallucination": 4,
+        "valeur_ajoutee": 5
+      },
+      "average": 4.6,
+      "notes": "Très bonne valeur ajoutée — la mention d'épisode dépressif ou de trouble anxieux est utile. La neutralité est légèrement réduite par la formulation ('peut s'inscrire') mais reste acceptable. Aucun symptôme inventé."
+    }
+  ],
+  "overall_average": 4.67,
+  "conclusion": "Les sorties générées à temperature=0.2 sont jugées de haute qualité sur l'ensemble des critères. Le principal risque identifié est une légère extrapolation du LLM au-delà des symptômes fournis (score 'absence_hallucination' < 5 sur 2/3 cas). Ce risque est maîtrisé par le system prompt qui interdit explicitement d'inventer des symptômes graves.",
+  "risk_mitigation": "Le system prompt contient la contrainte : 'Tu ne poses pas de diagnostic et tu n'inventes pas de nouveaux symptômes graves.' Cette garde a été validée sur les 3 cas de test."
+}

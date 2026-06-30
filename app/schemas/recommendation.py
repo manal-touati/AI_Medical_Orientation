@@ -28,8 +28,21 @@ class DetectedSymptomItem(BaseModel):
 
 
 class RecommendationResponse(BaseModel):
+    user_response_id: Optional[int] = None
     enriched_input: Optional[str] = None
     recommendations: List[RecommendationItem]
     red_flags: List[RedFlagItem] = Field(default_factory=list)
     warning: str
     detected_symptoms: List[DetectedSymptomItem] = Field(default_factory=list)
+
+
+class FeedbackRequest(BaseModel):
+    is_helpful: bool
+    comment: Optional[str] = None
+
+
+class FeedbackResponse(BaseModel):
+    id: int
+    user_response_id: int
+    is_helpful: bool
+    comment: Optional[str] = None

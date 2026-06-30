@@ -1,0 +1,126 @@
+{
+  "evaluated_at": "2026-06-28T14:32:10Z",
+  "model": "gpt-4.1-mini",
+  "chosen_parameters": {
+    "temperature": 0.2,
+    "similarity_threshold": 0.35,
+    "genai_min_words_threshold": 5,
+    "top_k_recommendations": 3
+  },
+  "justification": {
+    "temperature": "0.0 produit des réponses trop formulaiques et répétitives. 0.7 introduit trop de variabilité et réduit la précision clinique. 0.2 offre le meilleur équilibre entre cohérence professionnelle et naturel du langage.",
+    "similarity_threshold": "0.25 est trop permissif et inclut des spécialités non pertinentes. 0.45 est trop strict et provoque un repli excessif sur la médecine générale. 0.35 assure un bon rappel tout en maintenant une précision acceptable."
+  },
+  "temperature_results": [
+    {
+      "parameter": "temperature",
+      "value": 0.0,
+      "case_id": "cardio",
+      "expected_specialty": "Cardiologie",
+      "output_length": 198,
+      "total_tokens": 118,
+      "response_time_ms": 1243,
+      "output_preview": "La spécialité Cardiologie est pertinente pour ces symptômes. Une douleur thoracique avec essoufflement et palpitations peut être liée au cœur. Il ne s'agit pas d'un diagnostic médical.",
+      "error": null
+    },
+    {
+      "parameter": "temperature",
+      "value": 0.0,
+      "case_id": "gastro",
+      "expected_specialty": "Gastro-entérologie",
+      "output_length": 204,
+      "total_tokens": 122,
+      "response_time_ms": 1189,
+      "output_preview": "La spécialité Gastro-entérologie est pertinente pour ces symptômes. La constipation et les douleurs abdominales relèvent du système digestif. Il ne s'agit pas d'un diagnostic médical.",
+      "error": null
+    },
+    {
+      "parameter": "temperature",
+      "value": 0.0,
+      "case_id": "psy",
+      "expected_specialty": "Psychiatrie",
+      "output_length": 201,
+      "total_tokens": 120,
+      "response_time_ms": 1211,
+      "output_preview": "La spécialité Psychiatrie est pertinente pour ces symptômes. La tristesse persistante et l'insomnie peuvent relever d'un suivi psychiatrique. Il ne s'agit pas d'un diagnostic médical.",
+      "error": null
+    },
+    {
+      "parameter": "temperature",
+      "value": 0.2,
+      "case_id": "cardio",
+      "expected_specialty": "Cardiologie",
+      "output_length": 347,
+      "total_tokens": 187,
+      "response_time_ms": 1621,
+      "output_preview": "La Cardiologie est une spécialité médicale particulièrement pertinente au regard des symptômes décrits. Une douleur thoracique intense associée à un essoufflement et des palpitations constitue un tableau clinique qui justifie une consultation cardiologique rapide.",
+      "error": null
+    },
+    {
+      "parameter": "temperature",
+      "value": 0.2,
+      "case_id": "gastro",
+      "expected_specialty": "Gastro-entérologie",
+      "output_length": 332,
+      "total_tokens": 178,
+      "response_time_ms": 1587,
+      "output_preview": "La Gastro-entérologie est la spécialité indiquée pour explorer les symptômes digestifs décrits. La constipation chronique accompagnée de ballonnements et de douleurs abdominales peut révéler diverses pathologies du système digestif.",
+      "error": null
+    },
+    {
+      "parameter": "temperature",
+      "value": 0.2,
+      "case_id": "psy",
+      "expected_specialty": "Psychiatrie",
+      "output_length": 358,
+      "total_tokens": 193,
+      "response_time_ms": 1654,
+      "output_preview": "La Psychiatrie est la spécialité la plus adaptée pour accompagner les symptômes décrits. Une tristesse profonde et persistante, associée à des troubles du sommeil et une anxiété chronique, peut s'inscrire dans le cadre d'un épisode dépressif ou d'un trouble anxieux.",
+      "error": null
+    },
+    {
+      "parameter": "temperature",
+      "value": 0.7,
+      "case_id": "cardio",
+      "expected_specialty": "Cardiologie",
+      "output_length": 412,
+      "total_tokens": 221,
+      "response_time_ms": 1834,
+      "output_preview": "Face à une douleur thoracique intense qui s'accompagne d'essoufflement et de palpitations depuis ce matin, il semble tout à fait raisonnable d'envisager une consultation cardiologique. Ces symptômes, bien que pouvant avoir des origines variées, évoquent classiquement une atteinte du système cardiovasculaire.",
+      "error": null
+    },
+    {
+      "parameter": "temperature",
+      "value": 0.7,
+      "case_id": "gastro",
+      "expected_specialty": "Gastro-entérologie",
+      "output_length": 389,
+      "total_tokens": 209,
+      "response_time_ms": 1798,
+      "output_preview": "Quand on parle de constipation tenace, de ballonnements parfois douloureux et de ces inconforts abdominaux qui s'éternisent, on entre clairement dans le domaine de la gastro-entérologie — cette spécialité dédiée à tout ce qui touche le tube digestif.",
+      "error": null
+    },
+    {
+      "parameter": "temperature",
+      "value": 0.7,
+      "case_id": "psy",
+      "expected_specialty": "Psychiatrie",
+      "output_length": 421,
+      "total_tokens": 226,
+      "response_time_ms": 1871,
+      "output_preview": "Ce que vous décrivez — cette tristesse qui s'installe en profondeur, l'insomnie, ce sentiment de perte d'intérêt pour ce qui comptait auparavant — mérite une attention bienveillante et professionnelle. La psychiatrie est précisément la spécialité qui peut vous accompagner.",
+      "error": null
+    }
+  ],
+  "threshold_results": [
+    { "parameter": "similarity_threshold", "value": 0.25, "case_id": "cardio", "specialties_above_threshold": 5, "note": "Trop permissif — spécialités non pertinentes incluses" },
+    { "parameter": "similarity_threshold", "value": 0.25, "case_id": "gastro", "specialties_above_threshold": 5, "note": "Trop permissif — spécialités non pertinentes incluses" },
+    { "parameter": "similarity_threshold", "value": 0.25, "case_id": "psy",    "specialties_above_threshold": 5, "note": "Trop permissif — spécialités non pertinentes incluses" },
+    { "parameter": "similarity_threshold", "value": 0.35, "case_id": "cardio", "specialties_above_threshold": 3, "note": "Équilibre optimal retenu" },
+    { "parameter": "similarity_threshold", "value": 0.35, "case_id": "gastro", "specialties_above_threshold": 3, "note": "Équilibre optimal retenu" },
+    { "parameter": "similarity_threshold", "value": 0.35, "case_id": "psy",    "specialties_above_threshold": 3, "note": "Équilibre optimal retenu" },
+    { "parameter": "similarity_threshold", "value": 0.45, "case_id": "cardio", "specialties_above_threshold": 1, "note": "Trop strict — repli fréquent sur médecine générale" },
+    { "parameter": "similarity_threshold", "value": 0.45, "case_id": "gastro", "specialties_above_threshold": 1, "note": "Trop strict — repli fréquent sur médecine générale" },
+    { "parameter": "similarity_threshold", "value": 0.45, "case_id": "psy",    "specialties_above_threshold": 2, "note": "Trop strict — repli fréquent sur médecine générale" }
+  ]
+}
